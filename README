@@ -1,0 +1,22 @@
+Functional Morphology for Koine Greek
+-------------------------------------
+
+Introduction
+------------
+
+This is program attempting to provide morphology for Koine Greek. It
+is based on Functional Morphology by Markus Forsberg and Aarne Ranta
+[1]. The original FM package implemented Latin morphology, this
+package is based on the Latin definitions and some of the old code
+still exists in files. These should be removed as functionality for
+Greek is becoming more complete.
+
+Building
+--------
+
+To build the project, type 'make'. You will need C development
+environment (GCC) and Glasgow Haskell Compiler (GHC).
+
+
+
+[1] http://www.cs.chalmers.se/~markus/FM/
