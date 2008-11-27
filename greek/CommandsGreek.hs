@@ -27,44 +27,29 @@ import Frontend
 
 commands = 
     [
-     ("d1timh", ["τιμη"], app1 d1timh),
-     ("d1thalatta", ["θαλαττα"], app1 d1thalatta),
-     ("d1hora", ["χωρα"], app1 d1hora),
-     ("d1kriths", ["κριτης"], app1 d1krites),
-     ("d1neanias", ["νεανιας"], app1 d1neanias),
-     ("d2logos", ["λογος"], app1 d2logos),
-     ("d2odos", ["οδος"], app1 d2odos),
-     ("d2dwron", ["δωρον"], app1 d2dwron),
-     ("d2nous", ["νους"], app1 d2nous),
-     ("d2ostoun", ["οστουν"], app1 d2ostoun),
-     ("d3fylax", ["φυλαξ"], app1 d3fylax),
-     ("d3swma", ["σωμα"], app1 d3swma),
-     ("d3gerwn", ["γερων"], app1 d3gerwn),
-     ("d3anhr", ["ανηρ"], app1 d3anhr),
-     ("d3pathr", ["πατηρ"], app1 d3pathr),
-     ("d3elpis", ["ἐλπις"], app1 d3elpis),
-     ("d3rhtwr", ["ρητωρ"], app1 d3rhtwr),
-     ("d3gynh", ["γυνη"], app1 d3gynh),
-     ("w-paideuw", ["παιδευω"], app1 vwpaideuw),
-     ("prep", ["απο"], app1 preposition),
-     ("particle", ["και"], app1 particle),
-     ("adverb", ["καλως"], app1 adverb),
-     ("mi-didwmi", ["διδωμι"], app1 vmididwmi)
+     paradigm_h "d1timh"     ["τιμη"]    $ d1timh,
+     paradigm_h "d1thalatta" ["θαλαττα"] $ d1thalatta,
+     paradigm_h "d1hora"     ["χωρα"]    $ d1hora,
+     paradigm_h "d1kriths"   ["κριτης"]  $ d1krites,
+     paradigm_h "d1neanias"  ["νεανιας"] $ d1neanias,
+     paradigm_h "d2logos"    ["λογος"]   $ d2logos,
+     paradigm_h "d2odos"     ["οδος"]    $ d2odos,
+     paradigm_h "d2dwron"    ["δωρον"]   $ d2dwron,
+     paradigm_h "d2nous"     ["νους"]    $ d2nous,
+     paradigm_h "d2ostoun"   ["οστουν"]  $ d2ostoun,
+     paradigm_h "d3fylax"    ["φυλαξ"]   $ d3fylax,
+     paradigm_h "d3swma"     ["σωμα"]    $ d3swma,
+     paradigm_h "d3gerwn"    ["γερων"]   $ d3gerwn,
+     paradigm_h "d3anhr"     ["ανηρ"]    $ d3anhr,
+     paradigm_h "d3pathr"    ["πατηρ"]   $ d3pathr,
+     paradigm_h "d3elpis"    ["ἐλπις"]   $ d3elpis,
+     paradigm_h "d3rhtwr"    ["ρητωρ"]   $ d3rhtwr,
+     paradigm_h "d3gynh"     ["γυνη"]    $ d3gynh,
+     paradigm_h "w-paideuw"  ["παιδευω"] $ vwpaideuw,
+     paradigm_h "prep"       ["απο"]     $ preposition,
+     paradigm_h "particle"   ["και"]     $ particle,
+     paradigm_h "adverb"     ["καλως"]   $ adverb,
+     paradigm_h "mi-didwmi"  ["διδωμι"]  $ vmididwmi 
     ]
 
-{-
-commands = 
- [
-  ("d1rosa", ["rosa"], app1 d1rosa),
-  ("d1poeta", ["poeta"], app1 d1poeta),
-  ("d2servus",["servus"], app1 d2servus),
-  ("d2pinus", ["pinus"], app1 d2pinus),
-  ("d2virus",["virus"], app1 d2virus),
-  ("d2bellum",["bellum"], app1 d2bellum),
-  ("d2puer",["puer"], app1 d2puer),
-  ("d2liber",["liber"], app1 d2liber),
-  ("prep",   ["ad"], app1 prep),
-  ("v1amare", ["amare"], app1 v1amare),
-  ("v2habere", ["habere"], app1 v2habere)
-  ]
--}
+

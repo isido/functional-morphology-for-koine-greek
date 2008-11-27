@@ -1,42 +1,125 @@
+{-# OPTIONS_GHC -fglasgow-exts #-}
+
 module Frontend where
 
+import qualified Data.Set as Set
 import qualified Data.Map as Map
+import qualified Dict.Abs as Abs
 import Dictionary
-import ErrM
+import Dict.ErrM
+import Util
 import Char
+import System
+import Print
 import General
+import Monad(when)
 import Maybe(isJust)
+import System.IO.Unsafe (unsafePerformIO)
 import IO
 import Tokenize
 import UTF8
 import qualified CTrie
-
+import List(intersperse)
+import EditDistance
+import List
+import Compound
 
 -- Note that all Functions have default definitions, but 
 -- in the common case, you give, at least, definitions for "paradigms"
 -- "internDict" and "composition"
 
+type Label = String
+
+type TestInput = (String, Dictionary_Word, Category, Paradigm, [String], [Inherent],String)
+
+tword :: TestInput -> Maybe String
+tword ("",_,_,_,_,_,_) = Nothing
+tword (s,_,_,_,_,_,_) = Just s
+
+w :: TestInput -> String
+w t = case (tword t) of
+           Just s -> s
+           Nothing -> []
+
+thead :: TestInput -> String
+thead (_,s,_,_,_,_,_) = s
+
+tcat :: TestInput -> String
+tcat  (_,_,s,_,_,_,_) = s
+
+tpara :: TestInput -> String
+tpara (_,_,_,s,_,_,_) = s
+
+tparam :: TestInput -> [String]
+tparam (_,_,_,_,xs,_,_) = xs
+
+tinhs :: TestInput -> [String]
+tinhs (_,_,_,_,_,xs,_) = xs
+
+tid :: TestInput -> String
+tid (_,_,_,_,_,_,s) = s
+
+type PositiveTests = [(TestInput -> Maybe String)]
+
+type NegativeTests = [(TestInput -> Maybe String)]
+
+type Result = Maybe String
+
+message :: TestInput -> String -> Result
+message t s = Just $ concat ["# [", s, "]\n   ", quote (w t), " {h:\"", pr (thead t),"\" pos:",pr (tcat t)," param:", prl (tparam t),
+                             " is:",pri (tinhs t), " id:", pr (tid t), " p:", pr (tpara t),"}"]
+ where pr s = case s of
+               [] -> "unknown"
+               _  -> s
+       pri xs = case xs of
+                 [] -> "none"
+                 _  -> unwords xs
+       prl xs = case xs of
+                 [] -> "unknown"
+                 _  -> unwords xs
+
+pass :: Maybe String
+pass = Nothing
+
+type Encoding = String
+
+type TrPos   = String -> String
+
+type TrInhs  = [String] -> [String]
+
+type TrParam = String -> String
+
 --class Show a => Language a b | a -> b where
 -- | A class defined to be able to construct a language independent frontend
 class Show a => Language a  where
-  name        :: a -> String  
-  dbaseName   :: a -> String  
-  composition :: a -> ([General.Attr] -> Bool) 
-  env         :: a -> String 
-  paradigms   :: a -> Commands
-  internDict  :: a -> Dictionary 
-  tokenizer   :: a -> String -> [General.Tok]
-  wordGuesser :: a -> String -> [String]
+  name           :: a -> String  
+  dbaseName      :: a -> String  
+  composition    :: a -> Maybe CompDesc --([General.Attr] -> Bool) 
+  affixes        :: a -> Set.Set String
+  env            :: a -> String 
+  paradigms      :: a -> Commands
+  internDict        :: a -> Dictionary 
+  tokenizer         :: a -> String -> [General.Tok]
+  wordGuesser       :: a -> String -> [String]
+  termParser        :: a -> [Abs.Term] -> Entry -> Entry
+  testBench         :: a -> (PositiveTests,NegativeTests)
+  dup_id_exceptions :: a -> [(String,String)]
+  sandhi_rules      :: a -> (String,String) -> [(String,String)]
+  encoding    :: a -> Map.Map Encoding (Maybe TrPos, Maybe TrInhs, Maybe TrParam)
   name        l = map toLower (show l)
   dbaseName   l = name l ++ ".lexicon"
-  composition _ = noComp
-    where noComp [_] = True
-	  noComp   _ = False
+  composition l = Nothing -- noComp
+  affixes     l = Set.empty
   env         l = "FM_" ++ map toUpper (show l)
+  encoding    _ = Map.empty
   paradigms   _ = emptyC
   internDict  _ = emptyDict  
   tokenizer   _ = tokens
+  sandhi_rules _ = (:[])
   wordGuesser _ = const []
+  testBench   _ = ([],[])
+  dup_id_exceptions _ = []
+  termParser  _ _ e = e
 
 -- | type for Command Map  
 type Commands = Map.Map String ([String], [String] -> Entry) 
@@ -45,109 +128,155 @@ type Commands = Map.Map String ([String], [String] -> Entry)
 emptyC :: Commands
 emptyC = Map.empty
 
+isComp :: Language l => l -> Bool
+isComp l = case composition l of
+             Nothing -> False
+             _       -> True
+
 -- | add a command
 insertCommand :: (String,[String],[String] -> Entry) -> Commands -> Commands
-insertCommand (n,args,f) cs = Map.insert n (args,f) cs
+insertCommand (n,args,f) cs 
+  | Map.member n cs =  unsafePerformIO $ 
+                        do prError $ "internal error:\nduplicated paradigm identifier in command table: " ++ n
+                           return cs
+  | otherwise       =  Map.insert n (args,f) cs
 
 -- | Construct a Command Map
 mkCommands :: [(String,[String],[String] -> Entry)] -> Commands
 mkCommands = foldr insertCommand Map.empty
 
 -- | Create a dictionary from the list of paradigms.
-command_paradigms :: Language a => a -> Dictionary
-command_paradigms l = dictionary [f xs | (_,(xs,f)) <- Map.toList (paradigms l)]
+-- prParadigms :: Language a => a -> Dictionary -> String
+-- prParadigms l d = prDictionary d
 
--- | Parse commands.
-parseCommand :: Language a => a -> String -> Err Entry
-parseCommand l s = 
-   case words (remove_comment s) of
-    (x:xs) -> case Map.lookup x (paradigms l) of
-               Nothing -> Bad $ "Undefined paradigm identifier '" ++ x ++ "'."
-               Just (ys,f) -> if (length xs == length ys) then
-	                         Ok $ f xs
-                               else				 
-                                 Bad $ "Paradigm '" ++ s ++ "' requires " ++ (show (length ys)) ++ " arguments." 
-    [] -> Bad $ "No command."
+--unlines $ filter (not . null) $ map pr [(unwords (p:(map quote xs)), dictionary [f xs]) | (p,(xs,f)) <- Map.toList (paradigms l)]
+-- where pr (s,d) 
+--         | is_empty_dictionary d = "" 
+--         | otherwise             = "{\n" ++ s ++ "\n\n" ++ prDictionary d ++ "}\n"
+
+prTagset :: Language a => a -> Dictionary -> String
+prTagset l d = collect_and_print (Set.empty,Set.empty,Set.empty) (unDict d)
+ where collect_and_print :: (Set.Set String, Set.Set String, Set.Set String) -> [Entry] -> String
+       collect_and_print (s,i,p) [] = concat $ ["{\n\"pos\":[",
+                                                (concat (intersperse "," (map quote (Set.toList s)))),
+                                                "],\n",
+                                                "\"inherent\":[",
+                                                (concat (intersperse "," (map quote (Set.toList i)))),
+                                                "],\n",
+                                                "\"param\":[",
+                                                (concat (intersperse "," (map quote (Set.toList p)))),
+                                                "]\n}\n"]
+       collect_and_print (s,i,p) ((_,_, _ , pos, inhs, infl,_):xs) = collect_and_print (update [pos] s, update inhs i, update [t | (t,_) <- infl] p) xs
+       update     [] s = s
+       update (x:xs) s = update xs (Set.insert x s)
+
+prCompound :: Language a => a -> String
+prCompound l = case (composition l) of
+                 Nothing -> "NONE"
+                 Just x  -> prCompDesc x
+
+prExtract :: Language a => a -> String
+prExtract l = concat [pr p (entrywords (f xs)) | (p,(xs,f)) <- Map.toList (paradigms l)]
+ where
+  pr p ([],[]) = []
+  pr p (s,xs)  
+     -- do not include multi-word paradigms or numbers.
+   | contains_space (s:xs) || contains_digits (s:xs) = [] 
+   | otherwise             = print_paradigm p (s:xs) (commonSubsequences (s:xs))
+  contains_space xs = or [ elem ' ' x  | x <- xs]
+  contains_digits xs = or [ any isDigit x  | x <- xs]
+
+print_paradigm :: String -> [String] -> Set.Set String -> String
+print_paradigm name xs@(x:_) set = 
+ let vars = concat (intersperse "," (zipWith (++) (Set.toList set) (repeat ":char*"))) in 
+  unlines 
+   ["paradigm " ++ name ++ 
+    if null vars then "" else " [" ++ vars ++ "]",
+   " = " ++ (print (transform [] x)),
+   " {", (splitLines (intersperse "|" (map (print . (transform [])) (nub xs)))), " };\n"
+  ]
+ where print [] = []
+       print ((s,b):xs)
+        | b         = concat [s,if_conc xs,print xs]
+        | otherwise = concat ["\"",s,"\"",if_conc xs,print xs]
+       if_conc [] = []
+       if_conc _  = "+"
+       splitLines [] = []
+       splitLines xs = case splitAt 6 xs of
+                        (ys,[]) -> (" " ++ unwords ys) 
+                        (ys,zs) -> (" " ++ unwords ys ++ "\n") ++ splitLines zs
+       transform     []  [] = []
+       transform (x:xs)  [] = [(reverse (x:xs),False)]
+       transform ws  (x:xs) = case [z | z <- reverse (inits (x:xs)), 
+				        Set.member z set] of
+			       (y:_) | null ws -> (y,True):
+					       transform [] (drop (length y) (x:xs))
+			       (y:_) -> (reverse ws,False):(y,True): 
+			                       transform [] (drop (length y) (x:xs))
+			       _     -> transform (x:ws) xs
+
+printErrors :: ParadigmErrors -> (Bool, Bool) -> IO()
+printErrors _ (False,False) = return ()
+printErrors (unknowns, wrong_arguments) (ub,wb) = 
+    prError (concat 
+           [if ub then printUnknowns (Set.toList unknowns) else "", 
+            if wb then printWrongArguments (Set.toList wrong_arguments) else ""])
+ where printUnknowns [] =  "* No undefined paradigms detected!\n\n"
+       printUnknowns xs =  
+           "* Undefined paradigms detected\n\n" ++ (prErrorTable xs) ++ "\n"
+       printWrongArguments [] = "* No argument count mismatches detected!\n"
+       printWrongArguments xs =  
+           "* Argument count mismatches detected\n\n" ++
+                      (prErrorTable (map fst xs))
+
+check_lemma_duplication :: Dictionary -> IO()
+check_lemma_duplication d = prError $
+                            case duplicated_lemma_id d of
+                             [] -> "* No lemma id duplications detected!\n"
+                             xs -> "* Lemma id duplications detected\n\n" ++ 
+                                   (prErrorTable xs)
 
 -- | List paradigm names
 paradigmNames :: Language a => a -> [String]
-paradigmNames l = [ c ++ " " ++ unwords args | (c,(args,_)) <- Map.toList (paradigms l)]
+paradigmNames l = [ c ++ " \"" ++ unwords args ++ "\" ;" | (c,(args,_)) <- Map.toList (paradigms l)]
+
+paradigmID ::  Language a => a -> [String]
+paradigmID l = [ c | (c,_) <- Map.toList (paradigms l)]
 
 -- | Number of paradigms.
 paradigmCount :: Language a => a -> Int
 paradigmCount l = length $ Map.toList (paradigms l)
 
--- | Reading external lexicon. Create empty lexicon if the file does not exist.
-parseDict :: Language a => a -> FilePath -> IO (Dictionary,Int)
-parseDict l f = 
-    do (es,n) <- catch (readdict l f) (\_ -> do writeFile f [] ; prErr ("Created new external dictionary: \"" ++ f ++ "\".\n"); return ([],0))
-       return $ (dictionary es,n)       
-
 -- | Is input string a paradigm identifier?
 isParadigm :: Language a => a -> String -> Bool
 isParadigm l s = isJust $ Map.lookup s (paradigms l)
 
--- | Read external lexicon.
-readdict :: Language a => a -> FilePath -> IO ([Entry],Int)
-readdict l f = do h <- openFile f ReadMode
-		  process l h ([],0)
- where
-  process :: Language a => a -> Handle -> ([Entry],Int) -> IO ([Entry],Int)
-  process l h xs =
-    hIsEOF h >>= \b ->
-        if b then return xs
-           else
-            do s <- hGetLine h
-	       res <- collect (decodeUTF8 s) xs
-               process l h res
-  collect []     res = return res
-  collect xs@(c:s) (pre,n)
-   | isComment xs = return (pre,n)
-   | otherwise   = case parseCommand l (remove_comment xs) of
-                    Ok e  -> return (e:pre,n+1)
-		    Bad s -> do prErr s
-                                return (pre,n)
-  isComment           [] = False
-  isComment     (' ':xs) = isComment xs
-  isComment ('-':'-':xs) = True
-  isComment            _ = False       
+-- | Print to stdout.
+prError :: String -> IO()
+prError s =  hPutStr stdout (encodeUTF8 (s ++ "\n"))
 
--- | Remove comments in String.  
-remove_comment :: String -> String
-remove_comment [] = []
-remove_comment ('-':'-':_) = []
-remove_comment (x:xs)      = x:remove_comment xs
+class App a where
+    app :: a -> [String] -> Entry
+    arity :: a -> Int
 
--- Application of lists to functions
+instance App Entry where
+    app e [] = e
+    app e xs = error $ "Too many arguments, got " ++ show (length xs) ++ " wanted 0"
+    arity _  = 0
 
-app1 :: (String -> Entry) -> [String] -> Entry
-app1 f [x] = f x
-app1 _ _ = error $ "app1: wrong number of arguments"
+instance App a => App (String -> a) where
+ app f ys@(x:xs) | length ys == arity f = app (f x) (xs)
+                 | otherwise = error $ "Wrong number of arguments, got " ++ show (length ys) ++ " wanted " ++ show (arity f) ++ " in arguments: '" ++ (unwords ys) ++ "'"
+ arity f = 1 + arity (f undefined)
 
-app2 :: (String -> String -> Entry) -> [String] -> Entry
-app2 f [x,y] = f x y
-app2 _ _ = error $ "app2: wrong number of arguments"
+-- paradigm ::  String -> (String, [String], [String] -> Entry) 
+paradigm :: (App a) => String -> [String] -> a -> (String, [String], [String] -> Dictionary.Entry)
+paradigm id exs f = (id, exs, set_paradigm_id id . app f)
 
-app3 :: (String -> String -> String -> Entry) -> [String] -> Entry
-app3 f [x,y,z] = f x y z
-app3 _ _ = error $ "app3: wrong number of arguments"
+paradigm_h :: (App a) => String -> [String] -> a -> (String, [String], [String] -> Dictionary.Entry)
+paradigm_h id exs f = (id, exs, \xs -> case xs of 
+                                         []     -> set_paradigm_id id $ app f xs
+                                         (x:xs) -> set_head x $ set_paradigm_id id $ app f (x:xs))
 
-app4 :: (String -> String -> String -> String -> Entry) -> [String] -> Entry
-app4 f [x,y,z,w] = f x y z w
-app4 _ _ = error $ "app4: wrong number of arguments"
-
-app5 :: (String -> String -> String -> String -> String -> Entry) -> [String] -> Entry
-app5 f [x,y,z,w,a] = f x y z w a
-app5 _ _ = error $ "app5: wrong number of arguments"
-
-app6 :: (String -> String -> String -> String -> String -> String -> Entry) -> [String] -> Entry
-app6 f [x,y,z,w,a,b] = f x y z w a b
-app6 _ _ = error $ "app6: wrong number of arguments"
-
-app7 :: (String -> String -> String -> String -> String -> String -> String -> Entry) -> [String] -> Entry
-app7 f [x,y,z,w,a,b,c] = f x y z w a b c
-app7 _ _ = error $ "app7: wrong number of arguments"
-
--- | Print to stderr.
-prErr :: String -> IO()
-prErr s =  hPutStr stderr (s ++ "\n")
+-- paradigm_id :: (App a) => String -> [String] -> String -> a -> (String, [String], [String] -> Dictionary.Entry)
+-- paradigm_id id exs p f = (id, exs, set_paradigm_id p . (app f))

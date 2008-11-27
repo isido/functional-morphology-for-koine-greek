@@ -2,6 +2,7 @@ module General where
 
 import List (isPrefixOf,union)
 import SharedString
+import UTF8
 
 -- infixr 5 +/
 
@@ -26,8 +27,24 @@ class (Eq a, Show a) => Param a where
   prValue = show
 
 -- | Token type
-data Tok = W String | P String | D String
+data Tok = W String                   | 
+           A (String,String)          | -- dealing with ambiguous casing.
+           AA (String,String, String) | -- KALLE, Kalle, kalle
+	   P String                   | 
+           PD String                  |
+           D String
   deriving (Eq, Show)
+
+encodeUTF8Tok = applytok encodeUTF8
+
+decodeUTF8Tok = applytok decodeUTF8
+
+applytok f t = case t of
+                W s -> W (f s)
+                A (s1,s2) -> A (f s1, f s2)
+                AA (s1,s2,s3) -> AA (f s1,f s2,f s3)
+                P  s          -> P (f s)
+                D  s          -> D (f s)
 
 -- | Compound forms
 type Attr = Int
@@ -38,7 +55,7 @@ noComp = 0
 
 -- | Promote String to Str
 mkStr :: String -> Str
-mkStr     [] = Str []
+mkStr     [] = nonExist
 mkStr (x:xs) = Str [(x:xs)]
 
 -- | Sharing of Str
@@ -205,4 +222,3 @@ formsInTable tab = strings $ concat [unStr ss | (_,ss) <- tab]
 -- | Apply function to all word forms in table.
 mapInTable :: (String -> String) -> Table a -> Table a
 mapInTable f t = [(a, mapStr f ss) | (a,ss) <- t]
-

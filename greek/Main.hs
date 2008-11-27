@@ -38,6 +38,6 @@ data Greek = Greek
 
 instance Language Greek where
  internDict   _ = greekDict
- composition  _ = greek_compound
+ composition  _ = Just $ compDesc
  paradigms    _ = foldr insertCommand emptyC commands
  wordGuesser  _ = silly_guesser

@@ -24,7 +24,10 @@ module CTrie (
 import System.IO
 import System.IO.Unsafe
 import List
+import UTF8
 import Foreign.C
+import Compound
+import qualified Data.Set as Set 
 import Data.Char (isDigit)
 import Monad(when)
 import Dictionary(dict2fullform,dict2idlex,Dictionary,FullFormLex)
@@ -46,34 +49,36 @@ type Attr = Int
 
 -----------------------------------------------------------------------
 {- | Constructs a C-trie from a file containing a fullform lexicon. -}
-buildTrie :: FilePath -> Bool -> IO ()
-buildTrie f b = do fc <- newCString f
-		   when b reversed
-		   build fc
+buildTrie :: FilePath -> Bool -> Bool -> IO ()
+buildTrie f cb b = do fc <- newCString f
+                      when b reversed
+                      build fc
 
 {- | Constructs a C-trie from a Dictionary ADT. Note that the trie
    is not handled in Haskell. It is instead a global object in C. -}
-buildTrieDict :: Dictionary -> Bool -> IO ()
-buildTrieDict d b = do empty
-		       when b reversed
-                       start
-                       build_it $ prLex $ dict2fullform d
-		       stop
+buildTrieDict :: Bool -> Dictionary -> Bool -> IO ()
+buildTrieDict cb d b = 
+    do empty
+       when b reversed
+       start
+       build_it $ prLex cb $ dict2fullform d
+       stop
 
 buildTrieDictSynt :: Dictionary -> Bool -> IO ()
-buildTrieDictSynt d b = do empty
-		           when b reversed
-                           start
-                           build_it $ prLex $ (dict2fullform d) 
-                           no_count
-                           build_it $ prLex $ (dict2idlex d)
-		           stop
+buildTrieDictSynt d b = 
+    do empty
+       when b reversed
+       start
+       build_it $ prLex False $ (dict2fullform d) 
+       no_count
+       build_it $ prLex False $ (dict2idlex d)
+       stop
 
-prLex :: FullFormLex -> [(String,String)]
-prLex = concat . map prOne where
+prLex :: Bool -> FullFormLex -> [(String,String)]
+prLex b = concat . map prOne where
   prOne (s,ps)  = [(s,a) | a <- map prAttr ps]	
-  prAttr (a,ss) = ss ++ prCompAttr a
-  prCompAttr a  = " [" ++ show a ++ "] "
+  prAttr (a,ss) = ss -- ++ prCompAttr a
+  -- prCompAttr a  = if b then " [" ++ show a ++ "] " else ""
 
 {- | Inserts the wordform-analysis pairs into the C-trie. -}
 build_it :: [(String,String)] -> IO()
@@ -91,11 +96,12 @@ buildTrieWordlist xs b = do empty
                             build_it (zip xs (repeat []))
 			    stop
 
-trie_lookup :: String -> [(Attr,String)]
-trie_lookup = cstring2string . lookup_trie
+{-# INLINE trie_lookup #-}
+trie_lookup :: Bool -> String -> [(Attr,String)]
+trie_lookup cb = cstring2string . lookup_trie cb
 
-lookup_trie :: String -> [(Attr,CString)]
-lookup_trie s = 
+lookup_trie :: Bool -> String -> [(Attr,CString)]
+lookup_trie cb s = 
             unsafePerformIO $
                 do withCString s lookup_t
                    process
@@ -104,10 +110,9 @@ lookup_trie s =
                        False -> return []
                        _  -> do cs <- next
                                 xs <- process
-                                return ((toInt (getNumber cs),cs):xs)
+                                let n = if cb then toInt (getNumber cs) else 0
+                                return ((n,cs):xs)
          toInt = fromInteger . toInteger
-
-
 
 {- |Is the string a member in the trie? -}
 isInTrie :: String -> Bool
@@ -116,10 +121,11 @@ isInTrie s = unsafePerformIO $
 	         return $ in_t sc == 1
 
 {- |Compound analysis -}
-decompose :: ([Attr] -> Bool) -> String -> [[(Attr,String)]]
-decompose _  [] = []
-decompose f sentence = 
- 	concat $ map ((map cstring2string) . legal f) $ deconstruct sentence
+decompose :: Int -> Maybe CompDesc -> ((String,String) -> [(String,String)]) -> String -> [[(Attr,String)]]
+decompose _ _  _ [] = []
+decompose n (Just f) sandhi sentence = 
+     map cstring2string $ deconstruct n True sentence f sandhi
+decompose _ Nothing _ sentence = [[x] | x <- trie_lookup False sentence]
 
 {- |Translates the CString:s to String:s.-}
 cstring2string :: [(Attr,CString)] -> [(Attr,String)]
@@ -127,7 +133,7 @@ cstring2string = map f
   where f (a,cs) = (a,unsafePerformIO $ peekCString cs)
 
 {- |Is the set of substrings legal with respect to the compound
-   attributes? -}
+   attributes? 
 legal :: ([Attr] -> Bool) -> [String] -> [[(Attr,CString)]]
 legal f input = removeInvalids attrValues
  where
@@ -138,12 +144,16 @@ legal f input = removeInvalids attrValues
   flatten       [] = [[]] -- combine all analyses with all other analyses
   flatten (xs:xss) = [x:ys | x <- xs, ys <- res] 
       where res = flatten xss
-  attrValues = flatten $ map (lookup_trie) input
+  attrValues = flatten $ map (lookup_trie True) input
+-}
 
 {- |Deconstruct a string into substrings that appears in the trie without
    considering the compound attributes. -}
-deconstruct :: String -> [[String]]
-deconstruct [] = [[]]
-deconstruct s  = 
-    concat [map (p:) (deconstruct r) | (p@(_:_),r) <- zip (inits s) (tails s),
-	                                              isInTrie p]
+deconstruct :: Int -> Bool -> String -> CompDesc -> ((String,String) -> [(String,String)]) -> [[(Attr,CString)]]
+deconstruct _ _ [] comp _ = if done comp then [[]] else []
+deconstruct n b s  comp sandhi  = 
+    [p1:rs  | (p'@(_:_),r')    <- zip (inits s) (tails s),
+              (p,r) <- sandhi (p',r'),
+              (b && null r) || length p >= n,
+              (p1,Just ncomp) <- [((a,str),step comp a) | (a,str) <-  lookup_trie True p],
+              rs <- deconstruct n False r ncomp sandhi]

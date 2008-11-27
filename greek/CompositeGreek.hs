@@ -24,10 +24,13 @@
 module CompositeGreek where
 
 import General
+import Compound
+
 import BuildGreek
 import AttrGreek
 
-greek_compound :: [Attr] -> Bool
-greek_compound   [x,y] = (x /= y) && atS == y
-greek_compound     [x] = x /= atS
-greek_compound      _  = False
+compDesc :: CompDesc
+compDesc = [
+ [attr [atW], attr [atS]],
+ [attr [atW]]
+ ]    

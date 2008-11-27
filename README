@@ -17,13 +17,27 @@ Building & running
 To build the project, type 'make'. You will need C development
 environment (GCC) and Glasgow Haskell Compiler (GHC). This will
 produce a binary 'morpho_greek' that is the actual morphological
-analyzer. Type
+analyzer. 
 
-	  $ morpho_greek -h
+Program depends on haskell-network -library. If using Ubuntu or Debian,
+you can install necessary dependencies with
+
+     $ sudo apt-get install ghc6 libghc6-networking-dev build-essential
+
+When you have successfully compiled the program, type
+
+     $ morpho_greek -h
 
 for a list of command line options. A very small dictionary is
-provided. Unfortunately, no further documentation is (yet) provided,
-but refer [1] for more information.
+provided.
+
+To actually run the program with sample dictionary, type
+
+     $ morpho_greek greek.lexicon
+
+Now you can type words that are in dictionary -- in Greek (your
+terminal must be able to input Greek!). If the program recognizes
+word, it will output morphological analysis for the word.
 
 Status and Todo
 ---------------
@@ -56,14 +70,12 @@ Overall plan of action is as follows:
 
 Short term goals:
 
- * port morphology for FM version 2.2 (beta)
-
 Authors
 -------
 
 Functional Morphology framework was written by Markus Forsberg and
 Aarne Ranta. The Greek implementation is by Ilja Sidoroff
-(ilja.sidoroff-@-iki.fi). It is licensed by the term of GNU General
+(ilja.sidoroff  @  iki.fi). It is licensed by the term of GNU General
 Public License.
 
 

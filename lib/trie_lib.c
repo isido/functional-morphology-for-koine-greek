@@ -23,14 +23,16 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <ctype.h>
 #include <math.h>
 #include "trie_lib.h"
+#include <string.h>
 
 /************************ Defines **************************************/
 #define MAXLINE 1000
 #define ACCEPT_ZERO 1
 #define DELIMITER ':'
-
+#define DOT 20000
 /*******************************************************/
 
 Trie   global_trie = NULL; 
@@ -54,13 +56,51 @@ Values addValue(Values val,  const char* s){
 }
 
 /* EXPORT */
+
 int getNumber(const char* str){
-  char*  tmp   = strchr(str,'[');
+  int pos;
+ 
+  for(pos = 0 ; pos < strlen(str); pos++){
+    if(str[pos] == '\"' && isdigit (str[pos+1]))
+       break;
+  }
+    size_t size   = strspn(&str[pos+1],"1234567890") ;
+    char* number = malloc(sizeof(char)*size);
+    memcpy(number,&str[pos+1],size);
+    return atoi(number);
+}
+
+/*
+int getNumber(const char* str){
+  char* tmp; 
+  strcpy(tmp,str);
+  tmp = strreverse(tmp) ;
+  tmp = strchr(tmp,'\"');
   size_t size  = strspn(++tmp,"1234567890");
   char*  tmp2  = malloc(sizeof(char)*size);
   memcpy(tmp2, tmp, size);
+  tmp = strreverse(tmp2) ;
   return atoi(tmp2);
 }
+*/
+
+/*  public domain by Bob Stout */
+char *strreverse(char *str)
+{
+      char *p1, *p2;
+
+      if (! str || ! *str)
+            return str;
+      for (p1 = str, p2 = str + strlen(str) - 1; p2 > p1; ++p1, --p2)
+      {
+            *p1 ^= *p2;
+            *p2 ^= *p1;
+            *p1 ^= *p2;
+      }
+      return str;
+}
+
+
 
 /* EXPORT */
 char* next(){
@@ -172,6 +212,8 @@ void insert(Trie trie, const char *word,const char* result){
   traversal_ptr -> value = addValue(traversal_ptr -> value,result_copy);
   if(global_countable)
     global_count++ ;
+  if(global_count % DOT == 0) 
+    fprintf(stderr,".");
 }
 
 /* GLOBAL */
@@ -205,7 +247,7 @@ Values accept(Trie trie, const char *word){
 /************* File operations ************************************/
 
 /* LOCAL: Splits a line into two, with the delimiter DELIMITER */
-void split(const char *line, char *fst, char *snd){
+int split(const char *line, char *fst, char *snd){
   int i;
   char*tmp;
   tmp = strchr(line,DELIMITER);
@@ -214,11 +256,14 @@ void split(const char *line, char *fst, char *snd){
   for(i=0; i <= MAXLINE ; i++){
     if(line[i] != DELIMITER)
       fst[i] = line[i];
-    else{
-      fst[i] = '\0';
-      break;
-    }
+    else
+      if(line[i+1] == '{')
+        {
+          fst[i] = '\0';
+          return 1;
+        }
   }
+  return 0;
 }
 
 /* EXPORT */
@@ -227,20 +272,19 @@ void empty(){
 }
 
 void start(){
-  fprintf(stderr, " #");
   // if(global_reversed)
   //   fprintf(stderr, "reversed ");
-  //fprintf(stderr, "lookup table...\n");
+  fprintf(stderr, "computing ('.' = 20k word forms): ");
   time(&global_t1);
 }
 
 void stop(){
   time_t t2;
   time(&t2);
-  fprintf(stderr," %dk word forms ", llround(global_count/1000));
+  fprintf(stderr,"\n\n%dk word forms ", llround(global_count/1000));
   fprintf(stderr,"(c: %d, u: %d)\n", global_count,global_uniq_count);
   // fprintf(stderr,"Trie size (transitions): %.2e\n", (double)global_transitions);
-  fprintf(stderr," # compile time: %.2f seconds\n\n", difftime(t2,global_t1));
+  fprintf(stderr,"compile time: %.2f seconds\n", difftime(t2,global_t1));
 }
 
 /* EXPORT */
@@ -261,9 +305,9 @@ void build(const char *filename){
       break;
     if ((p = strchr(line, '\n')) != NULL)
       *p = '\0';
-    split(line,fst,snd);
-    if(strlen(snd) > 0 || ACCEPT_ZERO)
-      insert(global_trie,fst,snd) ;
+    if(split(line,fst,snd))
+      if(strlen(snd) > 0 || ACCEPT_ZERO)
+        insert(global_trie,fst,snd) ;
   }
   stop();
 }

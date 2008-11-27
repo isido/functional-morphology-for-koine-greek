@@ -23,6 +23,9 @@ module AttrGreek where
 
 import General
 
+atW :: Attr
+atW = 0
+
 atS :: Attr
 atS = 1
 

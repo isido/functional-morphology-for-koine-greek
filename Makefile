@@ -1,4 +1,4 @@
-GHCOPT    = -ffi -O -fvia-C -funbox-strict-fields -fwarn-incomplete-patterns
+GHCOPT    = -ffi -O2 -fvia-C -funbox-strict-fields -fwarn-incomplete-patterns -fglasgow-exts
 
 OFILES=rts.o trie_lib.o
 
@@ -15,4 +15,4 @@ greek: $(OFILES)
 	strip morpho_greek
 .PHONY : clean
 clean:
-	rm -f ./lib/*.o ./lib/*.hi *~ ./lib/*~ ./greek/*.o ./greek/*.hi ./greek/*~ *~ *.o morpho_greek 
+	rm -f ./lib/*.o ./lib/*.hi *~ ./lib/*~ ./greek/*.o ./greek/*.hi ./greek/*~ *~ ./lib/Dict/*.o ./lib/Dict/*.hi *.o morpho_greek 

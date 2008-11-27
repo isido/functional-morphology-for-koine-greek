@@ -1,0 +1,11 @@
+all:
+	happy -gca Dict/Par.y
+	alex -g Dict/Lex.x
+	(cd Dict/; latex Doc.tex; dvips Doc.dvi -o Doc.ps)
+	ghc --make Dict/Test.hs -o Dict/Test
+clean:
+	-rm -f Dict/*.log Dict/*.aux Dict/*.hi Dict/*.o Dict/*.dvi
+	-rm -f Dict/Doc.ps
+distclean: clean
+	-rm -f Dict/Doc.* Dict/Lex.* Dict/Par.* Dict/Layout.* Dict/Skel.* Dict/Print.* Dict/Test.* Dict/Abs.* Dict/Test Dict/ErrM.* Dict/SharedString.* Dict/Dict.dtd Dict/XML.* Makefile*
+	-rmdir -p Dict/

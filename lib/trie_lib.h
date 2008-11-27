@@ -30,6 +30,8 @@ typedef List_Struct* List ;
 
 void build(const char *filename);
 
+char *strreverse(char *str);
+
 void reversed();
 
 void no_count();
