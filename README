@@ -1,5 +1,5 @@
 Functional Morphology for Koine Greek
--------------------------------------
+=====================================
 
 Introduction
 ------------
@@ -11,11 +11,60 @@ package is based on the Latin definitions and some of the old code
 still exists in files. These should be removed as functionality for
 Greek is becoming more complete.
 
-Building
---------
+Building & running
+------------------
 
 To build the project, type 'make'. You will need C development
-environment (GCC) and Glasgow Haskell Compiler (GHC).
+environment (GCC) and Glasgow Haskell Compiler (GHC). This will
+produce a binary 'morpho_greek' that is the actual morphological
+analyzer. Type
+
+	  $ morpho_greek -h
+
+for a list of command line options. A very small dictionary is
+provided. Unfortunately, no further documentation is (yet) provided,
+but refer [1] for more information.
+
+Status and Todo
+---------------
+
+Currently, the morphological analysis is very much incomplete. Support
+is most complete for nouns, but some limited verbal paradigms are
+implemented.
+
+*Note:* the program does (again: yet) not understand any accents!
+ Breathings and iota subscriptum, on the other hand, are relevant!
+
+Event though the Greek dialect targetted is Koine Greek, I've used
+"Oxford Grammar of Classical Greek" by James Morwood (Oxford
+University Press 2001) as a basis for definitions and grammatical
+categories. This might change in future, if I find a handy and
+trustworthy grammar for Koine dialect.
+
+The long term goal is to have a complete morphological analyzer for
+Koine Greek. Another goal is to create some sort of educational
+software to help students learn all the myriad paradigms of ancient
+Greek language (if any of my students are reading this, prepare to
+become guinea pigs...).
+
+Overall plan of action is as follows:
+
+ 1) Implement support for nouns
+ 2) Implement support for regular verbs (including augmentation)
+ 3) Implement support for non-regular verbs
+ 4) Implement support for accentuation
+
+Short term goals:
+
+ * port morphology for FM version 2.2 (beta)
+
+Authors
+-------
+
+Functional Morphology framework was written by Markus Forsberg and
+Aarne Ranta. The Greek implementation is by Ilja Sidoroff
+(ilja.sidoroff-@-iki.fi). It is licensed by the term of GNU General
+Public License.
 
 
 
