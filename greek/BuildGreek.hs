@@ -127,6 +127,15 @@ adj1sacer sacer = entryP (decl1Adj sacer
 vwpaideuw :: DictForm -> Entry
 vwpaideuw s = entryP (vPaideuw s) "vw"
 
+vwtimaw :: DictForm -> Entry
+vwtimaw s = entryP (vTimaw s) "vaw"
+
+vwfilew :: DictForm -> Entry
+vwfilew s = entryP (vFilew s) "vew"
+
+vwdhlow :: DictForm -> Entry
+vwdhlow s = entryP (vDhlow s) "vow"
+
 vmididwmi :: DictForm -> Entry
 vmididwmi s = entryP (vDidwmi s) "vmi"
 

@@ -20,6 +20,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 -}
 
+
+{- Definition of inflections -}
 module RulesGreek where
 
 import TypesGreek
@@ -504,7 +506,32 @@ vPaideuw paideuw vf =
 
      paideu = tk 1 paideuw
      paideus = tk 1 paideuw ++ "σ" -- todo: fix this for general case
-   
+
+
+vTimaw :: String -> Verb
+vTimaw timaw vf =
+    case vf of
+      Indicative p n Present v -> mkStr $ endingsPresentAW tim (p, n, v)
+      _ -> mkStr $ tim
+    where
+      tim = tk 2 timaw
+
+vFilew :: String -> Verb
+vFilew filew vf =
+    case vf of
+      Indicative p n Present v -> mkStr $ endingsPresentAW fil (p, n, v)
+      _ -> mkStr $ fil
+    where
+      fil = tk 2 filew
+
+vDhlow :: String -> Verb
+vDhlow dhlow vf =
+    case vf of
+      Indicative p n Present v -> mkStr $ endingsPresentAW dhl (p, n, v)
+      _ -> mkStr $ dhl
+    where
+      dhl = tk 2 dhlow
+
 vDidwmi :: String -> Verb
 vDidwmi didwmi vf =
    mkStr $ didwmi
@@ -607,11 +634,6 @@ mkWStem verb t =
       PerfectI -> tk 1 verb ++ "κ"
       FutureI  -> tk 1 verb ++ "σ"
 
-
-
-
-
-
 mkSigmaticAoristStem :: String -> String
 mkSigmaticAoristStem verb =
     case lastc of
@@ -620,10 +642,8 @@ mkSigmaticAoristStem verb =
       'φ' -> tk 2 verb ++ "ψ"                       
       _ -> tk 1 verb ++ "σ"
       
-
     where
       lastc = last verb
-
 
 -- participle
 mkParticiple :: String -> TenseI -> Voice -> Number -> Case -> Gender -> Str
@@ -764,6 +784,67 @@ endingsSigmaticAorist stem (p, n, v) =
            (Plural,Second)   -> stem ++ "ασθε"
            (Plural,Third)    -> stem ++ "αντο"
 
+-- presonal endings for contracted ω-verbs in present tense
+endingsPresentAW :: String -> (Person, Number, Voice) -> String
+endingsPresentAW prStem (p, n, v) =
+    case v of
+       Active ->
+         case (n,p) of
+           (Singular,First)  -> prStem ++ "ῶ"
+           (Singular,Second) -> prStem ++ "ᾷς"
+           (Singular,Third)  -> prStem ++ "ᾷ"
+           (Plural,First)    -> prStem ++ "ῶμεν"
+           (Plural,Second)   -> prStem ++ "ᾶτε"
+           (Plural,Third)    -> prStem ++ "ῶσι"
+       _ ->
+         case (n,p) of
+           (Singular,First)  -> prStem ++ "ῶμαι"
+           (Singular,Second) -> prStem ++ "ᾷ"
+           (Singular,Third)  -> prStem ++ "ᾶται"
+           (Plural,First)    -> prStem ++ "ῶμεθα"
+           (Plural,Second)   -> prStem ++ "ᾶσθε"
+           (Plural,Third)    -> prStem ++ "ῶνται"
+
+endingsPresentEW :: String -> (Person, Number, Voice) -> String
+endingsPresentEW prStem (p, n, v) =
+    case v of
+       Active ->
+         case (n,p) of
+           (Singular,First)  -> prStem ++ "ῶ"
+           (Singular,Second) -> prStem ++ "εῖς"
+           (Singular,Third)  -> prStem ++ "εῖ"
+           (Plural,First)    -> prStem ++ "οῦμεν"
+           (Plural,Second)   -> prStem ++ "εῖτε"
+           (Plural,Third)    -> prStem ++ "οῦσι"
+       _ ->
+         case (n,p) of
+           (Singular,First)  -> prStem ++ "οῦμαι"
+           (Singular,Second) -> prStem ++ "εῖ" -- or "ῇ"
+           (Singular,Third)  -> prStem ++ "εῖται"
+           (Plural,First)    -> prStem ++ "οῦμεθα"
+           (Plural,Second)   -> prStem ++ "εῖσθε"
+           (Plural,Third)    -> prStem ++ "οῦνται"
+
+endingsPresentOW :: String -> (Person, Number, Voice) -> String
+endingsPresentOW prStem (p, n, v) =
+    case v of
+       Active ->
+         case (n,p) of
+           (Singular,First)  -> prStem ++ "ῶ"
+           (Singular,Second) -> prStem ++ "οῖς"
+           (Singular,Third)  -> prStem ++ "οῖ"
+           (Plural,First)    -> prStem ++ "οῦμεν"
+           (Plural,Second)   -> prStem ++ "οῦτε"
+           (Plural,Third)    -> prStem ++ "οῦσι"
+       _ ->
+         case (n,p) of
+           (Singular,First)  -> prStem ++ "οῦμαι"
+           (Singular,Second) -> prStem ++ "οῖ"
+           (Singular,Third)  -> prStem ++ "οῦται"
+           (Plural,First)    -> prStem ++ "οῦμεθα"
+           (Plural,Second)   -> prStem ++ "οῦσθε"
+           (Plural,Third)    -> prStem ++ "οῦνται"
+
 -- personal endings for μι-verbs in present tense          
 endingsPresentMi :: String -> (Person, Number, Voice) -> String
 endingsPresentMi prStem (p, n, v) =
@@ -884,8 +965,8 @@ mkImperativeFutureActive prStem (n,p) =
    _                  -> prStem ++ "to"
 --}
 
+
 --- Augmentation
-          
 augment :: String -> String
 augment word =
   if isVowel c then

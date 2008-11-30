@@ -68,14 +68,12 @@ Overall plan of action is as follows:
  3) Implement support for non-regular verbs
  4) Implement support for accentuation
 
-Short term goals:
-
 Authors
 -------
 
 Functional Morphology framework was written by Markus Forsberg and
 Aarne Ranta. The Greek implementation is by Ilja Sidoroff
-(ilja.sidoroff  @  iki.fi). It is licensed by the term of GNU General
+(ilja.sidoroff  @  iki.fi). It is licensed by terms of GNU General
 Public License.
 
 
