@@ -68,7 +68,7 @@ unStr (Str xs) = xs
 
 -- | Translate a [String] to Str
 strings :: [String] -> Str
-strings = Str 
+strings = Str . filter (not . null)
 
 -- | Apply function to 'a' and promote the resulting String to Str.
 mkStr1 :: (a -> String) -> a -> Str

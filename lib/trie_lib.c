@@ -281,7 +281,7 @@ void start(){
 void stop(){
   time_t t2;
   time(&t2);
-  fprintf(stderr,"\n\n%dk word forms ", llround(global_count/1000));
+  fprintf(stderr,"\n\n%dk word forms ", global_count/1000);
   fprintf(stderr,"(c: %d, u: %d)\n", global_count,global_uniq_count);
   // fprintf(stderr,"Trie size (transitions): %.2e\n", (double)global_transitions);
   fprintf(stderr,"compile time: %.2f seconds\n", difftime(t2,global_t1));
