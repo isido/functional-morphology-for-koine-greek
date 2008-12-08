@@ -31,11 +31,11 @@ import General
 -- Interface functions for Nouns.
 ----------------------------------------------
 
-d1timh :: DictForm -> Entry
-d1timh w = feminine (decl1timh w) "n1a"
+d1time :: DictForm -> Entry
+d1time w = feminine (decl1time w) "n1a"
 
-d1thalatta :: DictForm -> Entry
-d1thalatta w = feminine (decl1thalatta w) "n1b"
+d1thalassa :: DictForm -> Entry
+d1thalassa w = feminine (decl1thalassa w) "n1b"
 
 d1hora :: DictForm -> Entry
 d1hora w = feminine (decl1hora w) "n1c"
@@ -52,8 +52,8 @@ d2logos w = masculine (decl2logos w) "n2"
 d2odos :: DictForm -> Entry
 d2odos w = feminine (decl2logos w) "n2"
 
-d2dwron :: DictForm -> Entry
-d2dwron w = neuter (decl2dwron w) "n2"
+d2doron :: DictForm -> Entry
+d2doron w = neuter (decl2doron w) "n2"
 
 d2nous :: DictForm -> Entry
 d2nous w = masculine (decl2nous w) "n2"
@@ -64,28 +64,28 @@ d2ostoun w = neuter (decl2ostoun w) "n2"
 d3fylax :: DictForm -> Entry
 d3fylax w = masculine (decl3fylax w) "n3a"
 
-d3swma :: DictForm -> Entry
-d3swma w = neuter (decl3swma w) "n3b"
+d3soma :: DictForm -> Entry
+d3soma w = neuter (decl3soma w) "n3b"
 
-d3gerwn :: DictForm -> Entry
-d3gerwn w = masculine (decl3gerwn w) "n3c"
+d3geron :: DictForm -> Entry
+d3geron w = masculine (decl3geron w) "n3c"
 
-d3anhr :: DictForm -> Entry
-d3anhr w = masculine (decl3anhr w) "n3d"
+d3aner :: DictForm -> Entry
+d3aner w = masculine (decl3aner w) "n3d"
 
-d3pathr :: DictForm -> Entry
-d3pathr w = masculine (decl3pathr w) "n3e"
-
+d3pater :: DictForm -> Entry
+d3pater w = masculine (decl3pater w) "n3e"
 
 d3elpis :: DictForm -> Entry
 d3elpis w = feminine (decl3elpis w) "n3f"
 
-d3rhtwr :: DictForm -> Entry
-d3rhtwr w = masculine (decl3rhtwr w) "n3g"
+d3retor :: DictForm -> Entry
+d3retor w = masculine (decl3retor w) "n3g"
 
-d3gynh :: DictForm -> Entry
-d3gynh w = feminine (decl3gynh w) "n3h"
------------------------------------------------
+d3gyne :: DictForm -> Entry
+d3gyne w = feminine (decl3gyne w) "n3h"
+
+--- Prepositions, particles, adverbs
 
 preposition :: DictForm -> Entry
 preposition s = entryP (mkPreposition s) "inv"
@@ -99,53 +99,27 @@ adverb s = entryP (mkAdverb s) "adv"
 adverbIrreg :: DictForm -> DictForm -> DictForm -> Entry
 adverbIrreg x y z = entryP (mkAdverbIrreg x y z) "adv"
 
-{-
-adj1durus :: DictForm -> Entry
-adj1durus durus = adj1bonus durus (dur ++ "ior") (dur ++ "issimus") 
-  where dur = tk 2 durus
+--- Verbs
 
-adj1bonus :: DictForm -> DictForm -> DictForm -> Entry
-adj1bonus bonus melior optimus = 
-    entryP (decl1Adj bonus melior optimus decl1bonus) "adj1"
+vpaideuo :: DictForm -> Entry
+vpaideuo s = entryP (vPaideuo s) "ω"
 
-adj1tener :: DictForm -> Entry
-adj1tener tener = entryP (decl1Adj tener 
-		                   (tener ++ "ior") 
-				   (tener ++ "imus") 
-				   decl1tener) "adj1"
+vtimao :: DictForm -> Entry
+vtimao s = entryP (vTimao s) "άω"
 
-adj1sacer :: DictForm -> Entry
-adj1sacer sacer = entryP (decl1Adj sacer 
-		           (sacr ++ "ior") 
-			   (sacr ++ "issimus") 
-			   decl1sacer) "adj1"
- where sacr = tk 2 sacer ++ "r"
- 
- -}
-------------------------------------------------
+vfileo :: DictForm -> Entry
+vfileo s = entryP (vFileo s) "έω"
 
-vwpaideuw :: DictForm -> Entry
-vwpaideuw s = entryP (vPaideuw s) "vw"
+vdeloo :: DictForm -> Entry
+vdeloo s = entryP (vDeloo s) "όω"
 
-vwtimaw :: DictForm -> Entry
-vwtimaw s = entryP (vTimaw s) "vaw"
+vdidomi :: DictForm -> Entry
+vdidomi s = entryP (vDidomi s) "μι"
 
-vwfilew :: DictForm -> Entry
-vwfilew s = entryP (vFilew s) "vew"
+vlambano :: DictForm -> DictForm -> Entry
+vlambano s1 s2 = entryP (vLambano s1 s2) "ω2" 
 
-vwdhlow :: DictForm -> Entry
-vwdhlow s = entryP (vDhlow s) "vow"
-
-vmididwmi :: DictForm -> Entry
-vmididwmi s = entryP (vDidwmi s) "vmi"
-
-v1amare :: DictForm -> Entry
-v1amare s = entryP (vAmare s) "v1"
-
-v2habere :: DictForm -> Entry
-v2habere s = entryP (vHabere s) "v2"
-
-------------------------------------------------
+---
 
 noun :: Noun -> Gender -> Paradigm -> Entry
 noun n g p = entryIP n [prValue g] p

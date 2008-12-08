@@ -46,8 +46,11 @@ Currently, the morphological analysis is very much incomplete. Support
 is most complete for nouns, but some limited verbal paradigms are
 implemented.
 
-*Note:* the program does (again: yet) not understand any accents!
- Breathings and iota subscriptum, on the other hand, are relevant!
+*Note:* the program does (again: yet) not understand accents!
+ (exception: contracted verbs in present are accentuated).
+ 
+Breathing marks also cause problems so they are not consistently in
+use. Iota subscriptum, on the other hand, is relevant!
 
 Event though the Greek dialect targetted is Koine Greek, I've used
 "Oxford Grammar of Classical Greek" by James Morwood (Oxford
@@ -66,7 +69,7 @@ Overall plan of action is as follows:
  1) Implement support for nouns
  2) Implement support for regular verbs (including augmentation)
  3) Implement support for non-regular verbs
- 4) Implement support for accentuation
+ 4) Implement support for accentuation and breathing marks
 
 Authors
 -------

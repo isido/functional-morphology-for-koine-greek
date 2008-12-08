@@ -29,6 +29,8 @@ import TypesGreek
 greekDict :: Dictionary
 greekDict = dictionary $ nounsAdj -- ++ particles -- ++ adverbs
 
+nounsAdj = []
+{--
 nounsAdj = [
             d2logos "λογος",
             d2dwron "δωρον",
@@ -43,6 +45,7 @@ nounsAdj = [
             d3rhtwr "ρητωρ",
             d3gynh "γυνη"
            ]
+--}
 {-
          d2gladius "gladius",
 	 d2gladius "filius",

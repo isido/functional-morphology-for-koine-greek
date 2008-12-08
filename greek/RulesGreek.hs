@@ -37,16 +37,16 @@ type Stem     = String
 
 -- First declension
 
-decl1timh :: DictForm -> Noun
-decl1timh timh (NounForm n c) =
+decl1time :: DictForm -> Noun
+decl1time time (NounForm n c) =
     mkStr $
           case n of
             Singular -> case c of
-                          Nominative -> timh
+                          Nominative -> time
                           Accusative -> tim ++ "ην"
                           Genitive -> tim ++ "ηs"
                           Dative -> tim ++ "ῃ"
-                          Vocative -> timh
+                          Vocative -> time
             Plural ->   case c of
                           Nominative -> tim ++ "αι"
                           Accusative -> tim ++ "ας"
@@ -54,26 +54,26 @@ decl1timh timh (NounForm n c) =
                           Dative -> tim ++ "αις"
                           Vocative -> tim ++ "αι"
     where
-      tim = tk 1 timh
+      tim = tk 1 time
 
-decl1thalatta :: DictForm -> Noun
-decl1thalatta thalatta (NounForm n c) =
+decl1thalassa :: DictForm -> Noun
+decl1thalassa thalassa (NounForm n c) =
     mkStr $
         case n of
            Singular -> case c of
-                         Nominative -> thalatta
-                         Accusative -> thalatt ++ "αν"
-                         Genitive -> thalatt ++ "ας"
-                         Dative -> thalatt ++ "ῃ"
-                         Vocative -> thalatta
+                         Nominative -> thalassa
+                         Accusative -> thalass ++ "αν"
+                         Genitive -> thalass ++ "ας"
+                         Dative -> thalass ++ "ῃ"
+                         Vocative -> thalassa
            Plural ->  case c of
-                         Nominative -> thalatt ++ "αι"
-                         Accusative -> thalatt ++ "ας"
-                         Genitive -> thalatt ++ "ων"
-                         Dative -> thalatt ++ "αις"
-                         Vocative -> thalatta
+                         Nominative -> thalass ++ "αι"
+                         Accusative -> thalass ++ "ας"
+                         Genitive -> thalass ++ "ων"
+                         Dative -> thalass ++ "αις"
+                         Vocative -> thalassa
      where
-       thalatt = tk 2 thalatta
+       thalass = tk 1 thalassa
            
 
 decl1hora :: DictForm -> Noun
@@ -157,24 +157,24 @@ decl2logos logos (NounForm n c) =
     where
       log = tk 2 logos
 
-decl2dwron :: DictForm -> Noun
-decl2dwron dwron (NounForm n c) =
+decl2doron :: DictForm -> Noun
+decl2doron doron (NounForm n c) =
     mkStr $
           case n of 
             Singular -> case c of 
-                          Nominative -> dwron
-                          Accusative -> dwron
-                          Genitive -> dwr ++ "ου"
-                          Dative -> dwr ++ "ῳ"
-                          Vocative -> dwron
+                          Nominative -> doron
+                          Accusative -> doron
+                          Genitive -> dor ++ "ου"
+                          Dative -> dor ++ "ῳ"
+                          Vocative -> doron
             Plural   -> case c of
-                          Nominative -> dwr ++ "α"
-                          Accusative -> dwr ++ "α"
-                          Genitive -> dwr ++ "wn"
-                          Dative -> dwr ++ "οις"
-                          Vocative -> dwr ++ "α"
+                          Nominative -> dor ++ "α"
+                          Accusative -> dor ++ "α"
+                          Genitive -> dor ++ "wn"
+                          Dative -> dor ++ "οις"
+                          Vocative -> dor ++ "α"
     where
-      dwr = tk 2 dwron
+      dor = tk 2 doron
 
 decl2nous :: DictForm -> Noun
 decl2nous nous (NounForm n c) =
@@ -237,29 +237,29 @@ decl3fylax fylax (NounForm n c) =
             fylak = tk 1 fylax ++ "κ"
 
 
-decl3swma :: DictForm -> Noun
-decl3swma swma (NounForm n c) =
+decl3soma :: DictForm -> Noun
+decl3soma soma (NounForm n c) =
     mkStr $
           case n of
             Singular -> case c of
-                          Nominative -> swma
-                          Accusative -> swma
-                          Genitive -> swma ++ "τος"
-                          Dative -> swma ++ "τι"
-                          Vocative -> swma
+                          Nominative -> soma
+                          Accusative -> soma
+                          Genitive -> soma ++ "τος"
+                          Dative -> soma ++ "τι"
+                          Vocative -> soma
             Plural   -> case c of
-                          Nominative -> swma ++ "τα"
-                          Accusative -> swma ++ "τα"
-                          Genitive -> swma ++ "των"
-                          Dative -> swma ++ "σι"
-                          Vocative -> swma ++ "τα"
+                          Nominative -> soma ++ "τα"
+                          Accusative -> soma ++ "τα"
+                          Genitive -> soma ++ "των"
+                          Dative -> soma ++ "σι"
+                          Vocative -> soma ++ "τα"
 
-decl3gerwn :: DictForm -> Noun
-decl3gerwn gerwn (NounForm n c) =
+decl3geron :: DictForm -> Noun
+decl3geron geron (NounForm n c) =
     mkStr $
           case n of
             Singular -> case c of
-                          Nominative -> gerwn
+                          Nominative -> geron
                           Accusative -> ger ++ "οντα"
                           Genitive -> ger ++ "οντος"
                           Dative -> ger ++ "οντι"
@@ -271,14 +271,14 @@ decl3gerwn gerwn (NounForm n c) =
                           Dative -> ger ++ "ουσι"
                           Vocative -> ger ++ "οντες"
           where
-            ger = tk 2 gerwn
+            ger = tk 2 geron
            
-decl3anhr :: DictForm -> Noun
-decl3anhr anhr (NounForm n c) =
+decl3aner :: DictForm -> Noun
+decl3aner aner (NounForm n c) =
     mkStr $
           case n of
             Singular -> case c of
-                          Nominative -> anhr
+                          Nominative -> aner
                           Accusative -> andr ++ "α"
                           Genitive -> andr ++ "ος"
                           Dative -> andr ++ "ι"
@@ -287,18 +287,18 @@ decl3anhr anhr (NounForm n c) =
                           Nominative -> andr ++ "ες"
                           Accusative -> andr ++ "ας"
                           Genitive -> andr ++ "ων"
-                          Dative -> andr ++ "σι"
+                          Dative -> andr ++ "ασι" -- or ασιν
                           Vocative -> andr ++ "ες"
           where
-            andr = tk 2 anhr ++ "δρ"
-            an = tk 2 anhr
+            andr = tk 2 aner ++ "δρ"
+            an = tk 2 aner
 
-decl3pathr :: DictForm -> Noun
-decl3pathr pathr (NounForm n c) =
+decl3pater :: DictForm -> Noun
+decl3pater pater (NounForm n c) =
   mkStr $
           case n of
             Singular -> case c of
-                          Nominative -> pathr
+                          Nominative -> pater
                           Accusative -> pat ++ "ερα"
                           Genitive -> pat ++ "ρος"
                           Dative -> pat ++ "ρι"
@@ -310,7 +310,7 @@ decl3pathr pathr (NounForm n c) =
                           Dative -> pat ++ "ρασι"
                           Vocative -> pat ++ "ερες"
           where
-            pat = tk 2 pathr
+            pat = tk 2 pater
 
 
 decl3elpis :: DictForm -> Noun
@@ -333,32 +333,32 @@ decl3elpis elpis (NounForm n c) =
             elpi = tk 1 elpis
 
 
-decl3rhtwr :: DictForm -> Noun
-decl3rhtwr rhtwr (NounForm n c) =
+decl3retor :: DictForm -> Noun
+decl3retor retor (NounForm n c) =
     mkStr $
           case n of
             Singular -> case c of 
-                          Nominative -> rhtwr
-                          Accusative -> rht ++ "ορα"
-                          Genitive -> rht ++ "ορος"
-                          Dative -> rht ++ "ορι"
-                          Vocative -> rht ++ "ορ"
+                          Nominative -> retor
+                          Accusative -> ret ++ "ορα"
+                          Genitive -> ret ++ "ορος"
+                          Dative -> ret ++ "ορι"
+                          Vocative -> ret ++ "ορ"
             Plural   -> case c of
-                          Nominative -> rht ++ "ορες"
-                          Accusative -> rht ++ "ορας"
-                          Genitive -> rht ++ "ορων"
-                          Dative -> rht ++ "ορσι"
-                          Vocative -> rht ++ "ορες"
+                          Nominative -> ret ++ "ορες"
+                          Accusative -> ret ++ "ορας"
+                          Genitive -> ret ++ "ορων"
+                          Dative -> ret ++ "ορσι"
+                          Vocative -> ret ++ "ορες"
           where
-            rht = tk 2 rhtwr
+            ret = tk 2 retor
                           
 
-decl3gynh :: DictForm -> Noun
-decl3gynh gynh (NounForm n c) =
+decl3gyne :: DictForm -> Noun
+decl3gyne gyne (NounForm n c) =
     mkStr $
           case n of
             Singular -> case c of
-                          Nominative -> gynh
+                          Nominative -> gyne
                           Accusative -> gyn ++ "αικα"
                           Genitive -> gyn ++ "αικος"
                           Dative -> gyn ++ "αικι"
@@ -370,7 +370,7 @@ decl3gynh gynh (NounForm n c) =
                           Dative -> gyn ++ "αιξι"
                           Vocative -> gyn ++ "αικες"
           where
-            gyn = tk 1 gynh
+            gyn = tk 1 gyne
 
 {- Adjectives -}
 
@@ -453,17 +453,16 @@ declfortior fortior (g,n,c) =
 	fortiore    = fortior ++ "e"
 
 -}
--- Adverb
--- 
+-- Adverbs
 
 mkAdverb :: String -> Adverb
-mkAdverb kalws (AdverbForm gr) =
+mkAdverb kalos (AdverbForm gr) =
     case gr of
-        Positive    -> mkStr $ kalws
-        Comparative -> mkStr $ kalw ++ "τερον"
-        Superlative -> mkStr $ kalw ++ "τατα"
+        Positive    -> mkStr $ kalos
+        Comparative -> mkStr $ kalo ++ "τερον"
+        Superlative -> mkStr $ kalo ++ "τατα"
     where
-      kalw = tk 1 kalws
+      kalo = tk 1 kalos
 
 mkAdverbIrreg :: String -> String -> String -> Adverb
 mkAdverbIrreg mala mallon malista = mkStr1 $ giveValues [mala, mallon, malista]
@@ -478,7 +477,7 @@ mkPreposition s _ = mkStr s
 mkParticle :: String -> Particle
 mkParticle s _ = mkStr s
 
-------------------------- Verbs
+-- Verbs
 
 type PresentStem    = String
 type PerfectStem    = String
@@ -486,8 +485,8 @@ type SubjStem       = String
 type Infinitive     = String
 type Participle     = String
 
-vPaideuw :: String -> Verb
-vPaideuw paideuw vf =
+vPaideuo :: String -> Verb
+vPaideuo paideuo vf =
    case vf of
      Indicative p n Present v -> mkStr $ endingsPresentW paideu (p, n, v)
      Subjunctive p n PresentI v -> mkStr $ endingsPresentSubjunctive paideu (p, n, v)
@@ -498,121 +497,76 @@ vPaideuw paideuw vf =
      Indicative p n Aorist v -> mkStr $ augment (endingsSigmaticAorist paideus (p, n, v))
      Subjunctive p n AoristI v -> mkStr $ endingsPresentSubjunctive paideus (p, n, v)
      Indicative p n Future v -> mkStr $ endingsPresentW paideus (p, n, v)
-     Participle t v n c g -> mkParticiple paideuw t v n c g
-     _ -> mkStr $ paideuw
+     Participle t v n c g -> mkParticiple paideuo t v n c g
+     _ -> mkStr $ paideuo ++ "x"
    
    where
  --    stem = mkStem t v paideuw
 
-     paideu = tk 1 paideuw
-     paideus = tk 1 paideuw ++ "σ" -- todo: fix this for general case
+     paideu = tk 1 paideuo
+     paideus = tk 1 paideuo ++ "σ" -- todo: fix this for general case
 
+-- todo: unify different contractions
 
-vTimaw :: String -> Verb
-vTimaw timaw vf =
+vTimao :: String -> Verb
+vTimao timao vf =
     case vf of
       Indicative p n Present v -> mkStr $ endingsPresentAW tim (p, n, v)
+      Indicative p n Imperfect v -> mkStr $ augment (endingsImperfectW tim (p, n, v)) -- todo: fix this
+      Indicative p n Aorist Active 
+          -> mkStr $ augment (endingsSigmaticAorist times (p, n, Active))
+      Indicative p n Aorist Medium 
+          -> mkStr $ augment (endingsSigmaticAorist times (p, n, Medium))
       _ -> mkStr $ tim
     where
-      tim = tk 2 timaw
+      tim = tk 2 timao
+      times = tk 2 timao ++ "ησ" -- rule is not quite complete (ιαομαι)
 
-vFilew :: String -> Verb
-vFilew filew vf =
+vFileo :: String -> Verb
+vFileo fileo vf =
     case vf of
-      Indicative p n Present v -> mkStr $ endingsPresentAW fil (p, n, v)
+      Indicative p n Present v -> mkStr $ endingsPresentEW fil (p, n, v)
+      Indicative p n Aorist Active 
+          -> mkStr $ augment (endingsSigmaticAorist files (p, n, Active))
+      Indicative p n Aorist Medium 
+          -> mkStr $ augment (endingsSigmaticAorist files (p, n, Medium))
+
       _ -> mkStr $ fil
     where
-      fil = tk 2 filew
+      fil = tk 2 fileo
+      files = tk 2 fileo ++ "ησ"
 
-vDhlow :: String -> Verb
-vDhlow dhlow vf =
+vDeloo :: String -> Verb
+vDeloo deloo vf =
     case vf of
-      Indicative p n Present v -> mkStr $ endingsPresentAW dhl (p, n, v)
-      _ -> mkStr $ dhl
+      Indicative p n Present v -> mkStr $ endingsPresentOW del (p, n, v)
+      Indicative p n Aorist Active 
+          -> mkStr $ augment (endingsSigmaticAorist deles (p, n, Active))
+      Indicative p n Aorist Medium 
+          -> mkStr $ augment (endingsSigmaticAorist deles (p, n, Medium))
+
+      _ -> mkStr $ del
     where
-      dhl = tk 2 dhlow
+      del = tk 2 deloo
+      deles = tk 2 deloo ++ "ωσ"
 
-vDidwmi :: String -> Verb
-vDidwmi didwmi vf =
-   mkStr $ didwmi
-
--- Note : there exist a change e -> i
-
-vHabere :: String -> Verb
-vHabere habere vf =
-  case vf of
-   Indicative First Singular Future Active  -> mkStr $ habe ++ "bo"
-   _ -> mkStr $ habere
-   {-
-   Indicative p n t Active                  -> mkIndicativeActive habe (hab ++ "u") II (p,n,t)
-   Indicative First Singular Present Passive -> mkStr $ habe ++ "or"
-   Indicative First Singular Future Passive -> mkStr $ habe ++ "bor"
-   Indicative Third Plural   Future Passive -> mkStr $ habe ++ "buntur"
-   Indicative p n t Passive                 -> mkIndicativePassive habe (hab ++ "it") II (p,n,t) 
-   Subjunctive p n t Active                 -> mkSubjunctiveActive (hab ++ "ea") (hab ++ "it") habere (p,n,t)
-   Subjunctive p n t Passive                -> mkSubjunctivePassive (hab ++ "ea") (hab ++ "u") habere (p,n,t) 
-   Infinitive t v                           -> mkInfinitive habe (t,v)
-   ImperativePresent n v                    -> mkImperativePresent habe (n,v)
-   ImperativeFutureActive  n p   -> mkImperativeFutureActive habe (n,p)
-   ImperativeFuturePassiveSing p -> 
-    mkStr $   
-     case p of
-      _ -> habe ++ "tor" 
-   ImperativeFuturePassivePl -> mkStr $ habe ++ "ntor"
-   ParticiplesFuture  v ->
-    mkStr $
-      case v of
-       Active -> hab ++ "iturus"
-       Passive -> habe ++ "ndus"
-   ParticiplesPresent -> mkStr $ habe ++ "ns"
-   ParticiplesPerfect -> mkStr $ hab ++ "itus"
-   GerundGenitive -> mkStr $ habe ++ "ndi"
-   GerundDative   -> mkStr $ habe ++ "ndo"
-   GerundAcc      -> mkStr $ habe ++ "ndum"
-   GerundAbl      -> mkStr $ habe ++ "ndo"
-   SupineAcc      -> mkStr $ hab  ++ "ito"
-   SupineAblative -> mkStr $ hab  ++ "itu" -}
- where habe = tk 2 habere
-       hab  = tk 1 habe
-
-vAmare :: String -> Verb
-vAmare amare vf =
-  case vf of
-   Indicative First Singular Present Active  -> mkStr $ am ++ "o"
-   _ -> mkStr $ amare
-   {-
-   Indicative p n t Active  -> mkIndicativeActive ama (ama ++ "v") I (p,n,t) 
-   Indicative First Singular Present Passive  -> mkStr $ am ++ "or"
-   Indicative First Singular Future Passive -> mkStr $ ama ++ "bor"
-   Indicative p n t Passive  -> mkIndicativePassive ama (ama ++ "t") I (p,n,t) 
-   Subjunctive p n t Active  -> mkSubjunctiveActive (am ++ "e") (ama ++ "v") amare (p,n,t)
-   Subjunctive p n t Passive -> mkSubjunctivePassive (am ++ "e") (ama ++ "t") amare (p,n,t)
-   Infinitive t v            -> mkInfinitive ama (t,v)
-   ImperativePresent n v     -> mkImperativePresent ama (n,v)
-   ImperativeFutureActive  n p   -> mkImperativeFutureActive ama (n,p)
-   ImperativeFuturePassiveSing p ->  
-    mkStr $  
-     case p of
-      _ -> ama ++ "tor" 
-   ImperativeFuturePassivePl -> mkStr $ ama ++ "ntor"
-   ParticiplesFuture  v ->
-    mkStr $
-      case v of
-       Active -> ama ++ "turus"
-       Passive -> ama ++ "ndus"
-   ParticiplesPresent -> mkStr $ ama ++ "ns"
-   ParticiplesPerfect -> mkStr $ ama ++ "tus"
-   GerundGenitive -> mkStr $ ama ++ "ndi"
-   GerundDative   -> mkStr $ ama ++ "ndo"
-   GerundAcc      -> mkStr $ ama ++ "ndum"
-   GerundAbl      -> mkStr $ ama ++ "ndo"
-   SupineAcc      -> mkStr $ ama ++ "tum"
-   SupineAblative -> mkStr $ ama ++ "tu" -}
- where ama = tk 2 amare
-       am  = tk 1 ama
+vDidomi :: String -> Verb
+vDidomi didomi vf =
+   mkStr $ didomi
 
 
--- make stems
+vLambano :: String -> String -> Verb
+vLambano lambano lab vf =
+    case vf of
+      Indicative p n Aorist Active ->  
+          mkStr $ augment (endingsImperfectW lab (p, n, Active))
+      Imperative p n AoristI Active ->
+          mkStr $ (endingsPresentImperativeW lab (p, n, Active))
+      _ -> vPaideuo lambano vf
+
+
+
+-- make regular stems
 mkStem :: String -> Tense -> Voice -> String
 mkStem verb t v =
     case (t,v) of
@@ -636,14 +590,14 @@ mkWStem verb t =
 
 mkSigmaticAoristStem :: String -> String
 mkSigmaticAoristStem verb =
-    case lastc of
+    case c of
       'π' -> tk 2 verb ++ "ψ"
       'β' -> tk 2 verb ++ "ψ"
       'φ' -> tk 2 verb ++ "ψ"                       
       _ -> tk 1 verb ++ "σ"
       
     where
-      lastc = last verb
+      c = last verb
 
 -- participle
 mkParticiple :: String -> TenseI -> Voice -> Number -> Case -> Gender -> Str
@@ -651,14 +605,14 @@ mkParticiple part t v n c g =
     case v of
       Active -> 
           case g of
-            Masculine -> decl3gerwn (stem ++ "ων") (NounForm n c)
-            Neuter    -> decl3gerwn (stem ++ "ον") (NounForm n c)
-            Feminine  -> decl1thalatta (stem ++ "ουσα") (NounForm n c)
+            Masculine -> decl3geron (stem ++ "ων") (NounForm n c)
+            Neuter    -> decl3geron (stem ++ "ον") (NounForm n c)
+            Feminine  -> decl1thalassa (stem ++ "ουσα") (NounForm n c)
       _   ->
           case g of
             Masculine -> decl2logos (stem ++ "ομενος") (NounForm n c)
-            Neuter    -> decl2dwron (stem ++ "ομενον") (NounForm n c)
-            Feminine  -> decl1timh  (stem ++ "ομενη") (NounForm n c)
+            Neuter    -> decl2doron (stem ++ "ομενον") (NounForm n c)
+            Feminine  -> decl1time  (stem ++ "ομενη") (NounForm n c)
 
     where
       stem = mkWStem part t
@@ -674,7 +628,7 @@ endingsPresentW prStem (p, n, v) =
            (Singular,Third)  -> prStem ++ "ει"
            (Plural,First)    -> prStem ++ "ομεν"
            (Plural,Second)   -> prStem ++ "ετε"
-           (Plural,Third)    -> prStem ++ "ουσι"
+           (Plural,Third)    -> prStem ++ "ουσι" -- or ουσιν
        _ ->
          case (n,p) of
            (Singular,First)  -> prStem ++ "ομαι"
@@ -684,6 +638,7 @@ endingsPresentW prStem (p, n, v) =
            (Plural,Second)   -> prStem ++ "εσθε"
            (Plural,Third)    -> prStem ++ "ονται"
 
+-- personal endings for ω-verbs in imperative
 endingsPresentImperativeW :: String -> (PersonI, Number, Voice) -> String
 endingsPresentImperativeW prStem (p, n, v) =
     case v of
@@ -700,6 +655,7 @@ endingsPresentImperativeW prStem (p, n, v) =
             (Plural, SecondI)   -> prStem ++ "εσθε"
             (Plural, ThirdI)    -> prStem ++ "εσθων"
 
+-- personal endings for ω-verbs in subjunctive 
 endingsPresentSubjunctive :: String -> (Person, Number, Voice) -> String
 endingsPresentSubjunctive stem (p, n, v) =
     case v of
@@ -790,60 +746,60 @@ endingsPresentAW prStem (p, n, v) =
     case v of
        Active ->
          case (n,p) of
-           (Singular,First)  -> prStem ++ "ῶ"
-           (Singular,Second) -> prStem ++ "ᾷς"
-           (Singular,Third)  -> prStem ++ "ᾷ"
-           (Plural,First)    -> prStem ++ "ῶμεν"
-           (Plural,Second)   -> prStem ++ "ᾶτε"
-           (Plural,Third)    -> prStem ++ "ῶσι"
+           (Singular,First)  -> prStem ++ "β"
+           (Singular,Second) -> prStem ++ "ας"
+           (Singular,Third)  -> prStem ++ "ᾳ"
+           (Plural,First)    -> prStem ++ "ωμεν"
+           (Plural,Second)   -> prStem ++ "ατε"
+           (Plural,Third)    -> prStem ++ "ωσι"
        _ ->
          case (n,p) of
-           (Singular,First)  -> prStem ++ "ῶμαι"
-           (Singular,Second) -> prStem ++ "ᾷ"
-           (Singular,Third)  -> prStem ++ "ᾶται"
-           (Plural,First)    -> prStem ++ "ῶμεθα"
-           (Plural,Second)   -> prStem ++ "ᾶσθε"
-           (Plural,Third)    -> prStem ++ "ῶνται"
+           (Singular,First)  -> prStem ++ "ωμαι"
+           (Singular,Second) -> prStem ++ "ᾳ"
+           (Singular,Third)  -> prStem ++ "αται"
+           (Plural,First)    -> prStem ++ "ωμεθα"
+           (Plural,Second)   -> prStem ++ "ασθε"
+           (Plural,Third)    -> prStem ++ "ωνται"
 
 endingsPresentEW :: String -> (Person, Number, Voice) -> String
 endingsPresentEW prStem (p, n, v) =
     case v of
        Active ->
          case (n,p) of
-           (Singular,First)  -> prStem ++ "ῶ"
-           (Singular,Second) -> prStem ++ "εῖς"
-           (Singular,Third)  -> prStem ++ "εῖ"
-           (Plural,First)    -> prStem ++ "οῦμεν"
-           (Plural,Second)   -> prStem ++ "εῖτε"
-           (Plural,Third)    -> prStem ++ "οῦσι"
+           (Singular,First)  -> prStem ++ "ω"
+           (Singular,Second) -> prStem ++ "εις"
+           (Singular,Third)  -> prStem ++ "ει"
+           (Plural,First)    -> prStem ++ "ουμεν"
+           (Plural,Second)   -> prStem ++ "ειτε"
+           (Plural,Third)    -> prStem ++ "ουσι"
        _ ->
          case (n,p) of
-           (Singular,First)  -> prStem ++ "οῦμαι"
-           (Singular,Second) -> prStem ++ "εῖ" -- or "ῇ"
-           (Singular,Third)  -> prStem ++ "εῖται"
-           (Plural,First)    -> prStem ++ "οῦμεθα"
-           (Plural,Second)   -> prStem ++ "εῖσθε"
-           (Plural,Third)    -> prStem ++ "οῦνται"
+           (Singular,First)  -> prStem ++ "ουμαι"
+           (Singular,Second) -> prStem ++ "ει" -- or "ῇ"
+           (Singular,Third)  -> prStem ++ "ειται"
+           (Plural,First)    -> prStem ++ "ουμεθα"
+           (Plural,Second)   -> prStem ++ "εισθε"
+           (Plural,Third)    -> prStem ++ "ουνται"
 
 endingsPresentOW :: String -> (Person, Number, Voice) -> String
 endingsPresentOW prStem (p, n, v) =
     case v of
        Active ->
          case (n,p) of
-           (Singular,First)  -> prStem ++ "ῶ"
-           (Singular,Second) -> prStem ++ "οῖς"
-           (Singular,Third)  -> prStem ++ "οῖ"
-           (Plural,First)    -> prStem ++ "οῦμεν"
-           (Plural,Second)   -> prStem ++ "οῦτε"
-           (Plural,Third)    -> prStem ++ "οῦσι"
+           (Singular,First)  -> prStem ++ "ω"
+           (Singular,Second) -> prStem ++ "οις"
+           (Singular,Third)  -> prStem ++ "οι"
+           (Plural,First)    -> prStem ++ "ουμεν"
+           (Plural,Second)   -> prStem ++ "ουτε"
+           (Plural,Third)    -> prStem ++ "ουσι"
        _ ->
          case (n,p) of
-           (Singular,First)  -> prStem ++ "οῦμαι"
-           (Singular,Second) -> prStem ++ "οῖ"
-           (Singular,Third)  -> prStem ++ "οῦται"
-           (Plural,First)    -> prStem ++ "οῦμεθα"
-           (Plural,Second)   -> prStem ++ "οῦσθε"
-           (Plural,Third)    -> prStem ++ "οῦνται"
+           (Singular,First)  -> prStem ++ "ουμαι"
+           (Singular,Second) -> prStem ++ "οι"
+           (Singular,Third)  -> prStem ++ "ουται"
+           (Plural,First)    -> prStem ++ "ουμεθα"
+           (Plural,Second)   -> prStem ++ "ουσθε"
+           (Plural,Third)    -> prStem ++ "ουνται"
 
 -- personal endings for μι-verbs in present tense          
 endingsPresentMi :: String -> (Person, Number, Voice) -> String
@@ -979,8 +935,12 @@ augment word =
         _ ->
             case c of
               'α' -> "η" ++ tail word
+              'ἀ' -> "ἠ" ++ tail word
+              'ἁ' -> "ἡ" ++ tail word
               'ᾳ' -> "ῃ" ++ tail word
               'ε' -> "η" ++ tail word
+              'ἐ' -> "ἠ" ++ tail word
+              'ἑ' -> "ἡ" ++ tail word
               'ο' -> "ω" ++ tail word
               _ -> word
   else
@@ -1003,4 +963,4 @@ reduplicate word =
 
 
 isVowel :: Char -> Bool
-isVowel c = elem c "αεηιοωυ"
+isVowel c = elem c "ἀἁαἐἑεἠἡηἰἱιὀὁοὠὡωὑυ"

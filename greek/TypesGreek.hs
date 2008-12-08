@@ -183,16 +183,7 @@ data VerbForm =
     Optative Person Number TenseI Voice    |
     Infinitive TenseI Voice                |
     Participle TenseI Voice Number Case Gender
-   
-{-    
-    Infinitive TenseI Voice                |
-    Subjunctive Person Number TenseS Voice |
-    Imperate PersonI Number TenseM Voice    |
-    Optative Person Number TenseM Voice -}
   deriving (Show, Eq, Ord)    
-
-
-
 
 {- Instance of Param -}
 
