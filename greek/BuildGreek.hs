@@ -27,9 +27,8 @@ import TypesGreek
 import Dictionary
 import General
 
------------------------------------------------
--- Interface functions for Nouns.
-----------------------------------------------
+
+--- Interface functions for Nouns.
 
 d1time :: DictForm -> Entry
 d1time w = feminine (decl1time w) "n1a"
@@ -85,6 +84,14 @@ d3retor w = masculine (decl3retor w) "n3g"
 d3gyne :: DictForm -> Entry
 d3gyne w = feminine (decl3gyne w) "n3h"
 
+--- Adjectives
+
+adj1 :: DictForm -> Entry
+adj1 w = entryP (decl12Adj Light w ) "adj1"
+
+adj2 :: DictForm -> Entry
+adj2 w = entryP (decl12Adj Heavy w) "adj1"
+                           
 --- Prepositions, particles, adverbs
 
 preposition :: DictForm -> Entry

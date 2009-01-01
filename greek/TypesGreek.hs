@@ -26,6 +26,12 @@ module TypesGreek where
 import General
 import Invariant
 
+{- Generic parameters -}
+
+-- auxiliary type to simplify declension
+data SyllableWeight = Light | Heavy
+ deriving (Show, Eq)
+
 {- Greek noun -}
 
 {- Greek noun inflectional parameters -}

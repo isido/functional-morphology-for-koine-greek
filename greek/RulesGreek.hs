@@ -170,7 +170,7 @@ decl2doron doron (NounForm n c) =
             Plural   -> case c of
                           Nominative -> dor ++ "α"
                           Accusative -> dor ++ "α"
-                          Genitive -> dor ++ "wn"
+                          Genitive -> dor ++ "wν"
                           Dative -> dor ++ "οις"
                           Vocative -> dor ++ "α"
     where
@@ -374,20 +374,41 @@ decl3gyne gyne (NounForm n c) =
 
 {- Adjectives -}
 
-decl12Adj :: String ->  (String -> (Gender, Number, Case) -> Str) -> Adjective
-decl12Adj sofos decl (AdjectiveForm gr g n c) =
+decl12Adj :: SyllableWeight -> DictForm -> Adjective
+decl12Adj weight sofos (AdjectiveForm gr g n c) =
     case gr of
       Positive ->
-          decl sofos (g, n, c)
+          case g of
+            Masculine -> decl2logos sofos (NounForm n c)
+            Feminine  -> declFem sofe (NounForm n c)
+            Neuter    -> decl2doron sofos (NounForm n c)
       Comparative ->
-          decl sofoteros (g, n, c)
+          case g of
+            Masculine -> decl2logos sofoteros (NounForm n c)
+            Feminine  -> decl1hora sofotera (NounForm n c)
+            Neuter    -> decl2doron sofoteron (NounForm n c)
       Superlative ->
-          decl sofotatos (g, n, c)
+          case g of
+            Masculine -> decl2logos sofotatos (NounForm n c)
+            Feminine  -> decl1time sofotate (NounForm n c)
+            Neuter    -> decl2doron sofotaton (NounForm n c)
     where
-      sofoteros = tk 1 sofos ++ "τερος"
-      sofotatos = tk 1 sofos ++ "τατος"
-
-
+      o = if weight == Light 
+          then "ω"
+          else "ο"
+      x = dp 1 (tk 2 sofos) 
+      sofe = if x `elem` ["ε", "ι", "ρ"]
+             then tk 2 sofos ++ "α"
+             else tk 2 sofos ++ "η"
+      sofoteros = tk 2 sofos ++ o ++"τερος"
+      sofotera  = tk 2 sofos ++ o ++ "τερα"
+      sofoteron = tk 2 sofos ++ o ++ "τερον"
+      sofotatos = tk 2 sofos ++ o ++ "τατος"
+      sofotate  = tk 2 sofos ++ o ++ "τατη"
+      sofotaton = tk 2 sofos ++ o ++ "τατον"
+      declFem = if x `elem` ["ε", "ι", "ρ"] 
+                then decl1hora
+                else decl1time
 
 {-
 decl1Adj :: String -> String -> String -> (String -> (Gender,Number,Case) -> Str) -> Adjective

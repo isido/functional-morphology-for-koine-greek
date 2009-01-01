@@ -2,10 +2,10 @@ GHCOPT    = -ffi -O2 -fvia-C -funbox-strict-fields -fwarn-incomplete-patterns -f
 
 OFILES=rts.o trie_lib.o
 
-.PHONY: rts.o trie_lib.o haddock all sw osw ita greek rus spa tools
+.PHONY: rts.o trie_lib.o haddock all sw osw ita greek rus spa tools clean
 
-all:
-	make greek
+all: greek
+
 rts.o: 
 	gcc -c -O3 ./lib/rts.c
 trie_lib.o:
@@ -13,6 +13,5 @@ trie_lib.o:
 greek: $(OFILES)
 	ghc $(GHCOPT) $(FMLIB) -i./lib -i./greek --make ./greek/Main.hs  $(OFILES) -o morpho_greek
 	strip morpho_greek
-.PHONY : clean
 clean:
-	rm -f ./lib/*.o ./lib/*.hi *~ ./lib/*~ ./greek/*.o ./greek/*.hi ./greek/*~ *~ ./lib/Dict/*.o ./lib/Dict/*.hi *.o morpho_greek 
+	rm -f ./lib/*.o ./lib/*.hi *~ ./lib/*~ ./greek/*.o ./greek/*.hi ./greek/*~ *~ ./lib/Dict/*.o ./lib/Dict/*.hi *.o morpho_greek
