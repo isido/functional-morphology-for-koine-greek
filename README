@@ -4,25 +4,29 @@ Functional Morphology for Koine Greek
 Introduction
 ------------
 
-This is program attempting to provide morphology for Koine Greek. It
+This is a program attempting to provide morphology for Koine Greek. It
 is based on Functional Morphology by Markus Forsberg and Aarne Ranta
-[1]. The original FM package implemented Latin morphology, this
-package is based on the Latin definitions and some of the old code
-still exists in files. These should be removed as functionality for
-Greek is becoming more complete.
+[1]. The original FM package implemented Latin morphology, this Greek
+package is based on the Latin definitions and some of the old Latin
+code still exists in files. The old code will gradually disappear, as
+the Greek support becomes more complete.
 
-Building & running
-------------------
 
-To build the project, type 'make'. You will need C development
-environment (GCC) and Glasgow Haskell Compiler (GHC). This will
-produce a binary 'morpho_greek' that is the actual morphological
-analyzer. 
+Building and running
+--------------------
+
+To build the project, type 'make' in the project directory. You will
+need C development environment (GCC) and Glasgow Haskell Compiler
+(GHC). This will produce a binary 'morpho_greek' that is the actual
+morphological analyzer.
 
 Program depends on haskell-network -library. If using Ubuntu or Debian,
 you can install necessary dependencies with
 
      $ sudo apt-get install ghc6 libghc6-networking-dev build-essential
+
+Building under Windows should also be possible, you will probably just
+need to recreate build script that works in your environment.
 
 When you have successfully compiled the program, type
 
@@ -43,18 +47,16 @@ Status and Todo
 ---------------
 
 Currently, the morphological analysis is very much incomplete. Support
-is most complete for nouns, but some limited verbal paradigms are
-implemented.
+is most complete for nouns, there is some incomplete support for
+verbal paradigms.
 
-*Note:* the program does (again: yet) not understand accents!
- (exception: contracted verbs in present are accentuated).
- 
-Breathing marks also cause problems so they are not consistently in
-use. Iota subscriptum, on the other hand, is relevant!
+*Note:* the program does not understand accents! Breathing marks also
+cause problems so they are not consistently in use. Iota subscriptum,
+on the other hand, is relevant!
 
-Event though the Greek dialect targetted is Koine Greek, I've used
+Even though the targetted Greek dialect is Koine Greek, I've used
 "Oxford Grammar of Classical Greek" by James Morwood (Oxford
-University Press 2001) as a basis for definitions and grammatical
+University Press 2001) as the basis for definitions and grammatical
 categories. This might change in future, if I find a handy and
 trustworthy grammar for Koine dialect.
 
