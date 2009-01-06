@@ -27,8 +27,9 @@ import Frontend
 
 commands = 
     [
-     paradigm_h "adj1sofos"  ["σοφος"]   $ adj1,
-     paradigm_h "adj2ptohos" ["πτωχος"]  $ adj2,    
+     paradigm_h "adj3sofos"  ["σοφος"]   $ adj12l,
+     paradigm_h "adj3ptohos" ["πτωχος"]  $ adj12h,
+     paradigm_h "adj2adikos" ["ἀδικος"]  $ adj2,
      paradigm_h "d1time"     ["τιμη"]    $ d1time,
      paradigm_h "d1thalassa" ["θαλαττα"] $ d1thalassa,
      paradigm_h "d1hora"     ["χωρα"]    $ d1hora,

@@ -86,11 +86,17 @@ d3gyne w = feminine (decl3gyne w) "n3h"
 
 --- Adjectives
 
-adj1 :: DictForm -> Entry
-adj1 w = entryP (decl12Adj Light w ) "adj1"
+--- First & Second declension, "light"
+adj12l :: DictForm -> Entry
+adj12l w = entryP (decl12Adj Light w ) "adj1"
 
+--- First & Second declension, "heavy"
+adj12h :: DictForm -> Entry
+adj12h w = entryP (decl12Adj Heavy w) "adj1"
+
+--- Second declension, two-termination
 adj2 :: DictForm -> Entry
-adj2 w = entryP (decl12Adj Heavy w) "adj1"
+adj2 w = entryP (decl2Adj w) "adj2"
                            
 --- Prepositions, particles, adverbs
 

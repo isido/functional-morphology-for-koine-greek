@@ -410,6 +410,25 @@ decl12Adj weight sofos (AdjectiveForm gr g n c) =
                 then decl1hora
                 else decl1time
 
+decl2Adj :: DictForm -> Adjective 
+decl2Adj adikos (AdjectiveForm gr g n c) =
+    case gr of
+      Positive ->
+          case g of
+            Neuter -> decl2doron adikos (NounForm n c)
+            _      -> decl2logos adikos (NounForm n c)
+      Comparative ->
+          case g of
+            Neuter -> decl2doron adikoteros (NounForm n c)
+            _      -> decl2logos adikoteros (NounForm n c)
+      Superlative ->
+          case g of
+            Neuter -> decl2doron adikotatos (NounForm n c)
+            _      -> decl2logos adikotatos (NounForm n c)
+    where
+      adikoteros = tk 1 adikos ++ "τερος"
+      adikotatos = tk 1 adikos ++ "τατος"
+
 {-
 decl1Adj :: String -> String -> String -> (String -> (Gender,Number,Case) -> Str) -> Adjective
 decl1Adj bonus melior optimus decl (AdjectiveForm gr g n c) =
