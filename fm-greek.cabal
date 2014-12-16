@@ -1,0 +1,21 @@
+name: fm-greek
+version: 0.1.0
+synopsis: Functional Morphology for Koine Greek
+description: Functional morphology for Koine Greek, based on the Functional Morphology framework by Markus Forsberg and Aarne Ranta.
+license: GPL-3
+license-file: LICENSE
+author: Ilja Sidoroff
+maintainer: ilja.sidoroff@iki.fi
+
+cabal-version: >=1.10
+build-type: Simple
+
+executable morpho_greek
+  main-is: Main.hs
+  hs-source-dirs: greek,lib
+  default-language: Haskell98
+  build-depends: base==4.6.*,
+                 haskell98 >=2.0.0.3,
+                 array >=0.5 && <0.6,
+                 containers >=0.5 && <0.6,
+                 network
