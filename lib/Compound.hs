@@ -1,8 +1,8 @@
 module Compound where
 
 import General
-import Maybe
-import List(intersperse)
+import Data.Maybe
+import Data.List(intersperse)
 
 type CompDesc = [[CompAttr]]
 

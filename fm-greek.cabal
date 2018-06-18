@@ -10,12 +10,27 @@ maintainer: ilja.sidoroff@iki.fi
 cabal-version: >=1.10
 build-type: Simple
 
+extra-source-files: lib/Dict/Lex.x
+                    , lib/Dict/Par.y
+            
 executable morpho_greek
   main-is: Main.hs
-  hs-source-dirs: greek,lib
+  hs-source-dirs: greek
+                , lib
+  build-tools: alex
+             , happy
+  other-modules: Dict.Lex
+               , Dict.Par
   default-language: Haskell98
-  build-depends: base==4.6.*,
-                 haskell98 >=2.0.0.3,
-                 array >=0.5 && <0.6,
-                 containers >=0.5 && <0.6,
-                 network
+  build-depends: base
+--               , haskell98
+               , array
+               , containers
+               , network
+               , hashable
+               , hashtables
+  c-sources: lib/rts.c
+           , lib/trie_lib.c
+  cc-options: -O3
+  
+

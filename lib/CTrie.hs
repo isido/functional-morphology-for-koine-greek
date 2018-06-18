@@ -1,3 +1,4 @@
+{-# LANGUAGE ForeignFunctionInterface #-}
 ----------------------------------------------------------------------
 -- |
 -- Module      : Dictionary
@@ -23,13 +24,13 @@ module CTrie (
 
 import System.IO
 import System.IO.Unsafe
-import List
+import Data.List
 import UTF8
 import Foreign.C
 import Compound
 import qualified Data.Set as Set 
 import Data.Char (isDigit)
-import Monad(when)
+import Control.Monad(when)
 import Dictionary(dict2fullform,dict2idlex,Dictionary,FullFormLex)
 
 foreign import ccall "trie_lib.h build"        build     :: CString -> IO()

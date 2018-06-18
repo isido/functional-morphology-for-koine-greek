@@ -8,20 +8,20 @@ import qualified Dict.Abs as Abs
 import Dictionary
 import Dict.ErrM
 import Util
-import Char
-import System
+import Data.Char
+import System.IO
 import Print
 import General
-import Monad(when)
-import Maybe(isJust)
+import Control.Monad(when)
+import Data.Maybe(isJust)
 import System.IO.Unsafe (unsafePerformIO)
-import IO
+import System.IO
 import Tokenize
 import UTF8
 import qualified CTrie
-import List(intersperse)
+import Data.List(intersperse)
 import EditDistance
-import List
+import Data.List
 import Compound
 
 -- Note that all Functions have default definitions, but 

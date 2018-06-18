@@ -6,9 +6,11 @@ import qualified Dict.Abs as Abs
 import Dict.GetDict
 import Dictionary
 import Frontend
-import IO
-import Monad(when)
-import System
+import System.Exit
+import System.IO
+import Control.Exception
+import Control.Monad(when)
+import System.IO -- TODO: check
 import Dict.ErrM
 import Util
 
@@ -34,7 +36,8 @@ parseCommand l pe e =
 parseDict :: Language a => a -> FilePath -> (Bool,Bool,Bool) -> IO (Err (Dictionary,Int))
 parseDict l f  (undefcheck,argccheck,unusedcheck) = 
     do res <- catch (readdict l f (undefcheck,argccheck,unusedcheck)) 
-               (\_ -> do prErr ("Unable to load dictionary file: \"" ++ f ++ "\".\n")
+               (\e -> do let err = show (e :: IOException)
+                         prErr ("Unable to load dictionary file: \"" ++ f ++ "\": " ++ err ++ "\n")
                          exitFailure)
        case res of
          Ok (es,n) -> return $ Ok (dictionary es,n)       

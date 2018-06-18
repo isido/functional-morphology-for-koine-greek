@@ -2,9 +2,9 @@ module Print where
 
 import General
 import Dictionary
-import List (intersperse,sort)
-import IO
-import Char
+import Data.List (intersperse,sort)
+import System.IO
+import Data.Char
 import Util
 import qualified Data.Set as Set
 

@@ -1,8 +1,8 @@
 module Util where
 
-import List
+import Data.List
 import UTF8
-import IO
+import System.IO
 import qualified Data.Set as Set
 
 quote :: String -> String

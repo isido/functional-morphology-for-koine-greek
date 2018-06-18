@@ -1,7 +1,7 @@
 module Net where
 
 import Network
-import IO
+import System.IO
 
 server :: Int -> (String -> String) -> IO()
 server n f =  withSocketsDo $ 

@@ -6,7 +6,7 @@ module Dict.Lex where
 import UTF8
 
 }
-
+%wrapper "posn"
 
 $l = [a-zA-Z\192 - \255] # [\215 \247]    -- isolatin1 letter FIXME
 $c = [A-Z\192-\221] # [\215]    -- capital isolatin1 letter FIXME
@@ -45,19 +45,18 @@ data Tok =
  | TV !String     -- identifiers
  | TD !String     -- double precision float literals
  | TC !String     -- character literals
-
  deriving (Eq,Show,Ord)
 
 data Token = 
-   PT  Posn Tok
- | Err Posn
-  deriving (Eq,Show,Ord)
+   PT  AlexPosn Tok
+ | Err AlexPosn
+  deriving (Eq,Show)
 
-tokenPos (PT (Pn _ l _) _ :_) = "line " ++ show l
-tokenPos (Err (Pn _ l _) :_) = "line " ++ show l
+tokenPos (PT (AlexPn _ l _) _ :_) = "line " ++ show l
+tokenPos (Err (AlexPn _ l _) :_) = "line " ++ show l
 tokenPos _ = "end of file"
 
-posLineCol (Pn _ l c) = (l,c)
+posLineCol (AlexPn _ l c) = (l,c)
 mkPosToken t@(PT p _) = (posLineCol p, prToken t)
 
 prToken t = case t of
@@ -92,43 +91,6 @@ unescapeInitTail = unesc . tail where
     c:cs      -> c : unesc cs
     _         -> []
 
--------------------------------------------------------------------
--- Alex wrapper code.
--- A modified "posn" wrapper.
--------------------------------------------------------------------
+tokens = alexScanTokens -- TODO use this in parser
 
-data Posn = Pn !Int !Int !Int
-      deriving (Eq, Show,Ord)
-
-alexStartPos :: Posn
-alexStartPos = Pn 0 1 1
-
-alexMove :: Posn -> Char -> Posn
-alexMove (Pn a l c) '\t' = Pn (a+1)  l     (((c+7) `div` 8)*8+1)
-alexMove (Pn a l c) '\n' = Pn (a+1) (l+1)   1
-alexMove (Pn a l c) _    = Pn (a+1)  l     (c+1)
-
-type AlexInput = (Posn, -- current position,
-               Char,     -- previous char
-               String)   -- current input string
-
-tokens :: String -> [Token]
-tokens str = go (alexStartPos, '\n', str)
-    where
-      go :: (Posn, Char, String) -> [Token]
-      go inp@(pos, _, str) =
-               case alexScan inp 0 of
-                AlexEOF                -> []
-                AlexError (pos, _, _)  -> [Err pos]
-                AlexSkip  inp' len     -> go inp'
-                AlexToken inp' len act -> act pos (take len str) : (go inp')
-
-alexGetChar :: AlexInput -> Maybe (Char,AlexInput)
-alexGetChar (p, c, [])    = Nothing
-alexGetChar (p, _, (c:s)) =
-    let p' = alexMove p c
-     in p' `seq` Just (c, (p', c, s))
-
-alexInputPrevChar :: AlexInput -> Char
-alexInputPrevChar (p, c, s) = c
 }

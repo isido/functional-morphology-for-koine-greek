@@ -1,12 +1,15 @@
 
 module SharedString (shareString) where
-
-import Data.HashTable as H
+-- TODO get rid of unsafePerformIO
+import Data.Hashable
+import Data.HashTable.IO as H
 import System.IO.Unsafe (unsafePerformIO)
+
+type HashTable k v = H.BasicHashTable k v
 
 {-# NOINLINE stringPool #-}
 stringPool :: HashTable String String
-stringPool = unsafePerformIO $ new (==) hashString
+stringPool = unsafePerformIO $ H.new
 
 {-# NOINLINE shareString #-}
 shareString :: String -> String

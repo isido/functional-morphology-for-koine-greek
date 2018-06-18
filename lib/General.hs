@@ -1,6 +1,6 @@
 module General where
 
-import List (isPrefixOf,union)
+import Data.List (isPrefixOf,union)
 import SharedString
 import UTF8
 

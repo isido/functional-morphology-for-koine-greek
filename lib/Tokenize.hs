@@ -1,8 +1,8 @@
 module Tokenize (tokens, norm, isPunct, isPunctS, isNumber) where
 
-import Char
-import List
-import System
+import Data.Char hiding (isNumber)
+import Data.List
+import System.IO
 import General
 import qualified Data.Set as S
 

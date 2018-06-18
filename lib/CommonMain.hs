@@ -2,19 +2,19 @@ module CommonMain where
 
 import DictToDictionary
 import Print
-import List(intersperse,isPrefixOf,sortBy)
-import System(getArgs, getEnv)
+import Data.List(intersperse,isPrefixOf,sortBy)
+import System.Environment(getArgs, getEnv)
 import GeneralIO
 import General
-import IO
+import System.IO
 import qualified Data.Set as Set
-import System(getProgName)
+import System.Environment(getProgName)
 import Dictionary
 import Frontend
-import Char
+import Data.Char
 import Dict.ErrM
 import Print
-import Monad
+import Control.Monad
 import UTF8
 import Command
 import Util

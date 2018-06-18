@@ -1,9 +1,9 @@
 module EditDistance where
 
 import Data.Array
-import List
-import Char
-import System
+import Data.List
+import Data.Char
+import System.IO -- TODO: check
 import qualified Data.Set
 
 data Position    = Int

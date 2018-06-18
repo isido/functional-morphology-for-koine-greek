@@ -18,19 +18,19 @@ import Dict.GetDict(getEntry)
 import DictToDictionary
 import General
 import Dictionary
-import IO
+import System.IO
 import Command (Comp(..))
 import qualified Data.Set as Set
 import qualified Data.Map as Map
 import Frontend
-import List (nub,sort,intersperse)
-import Maybe(fromJust)
-import Char
+import Data.List (nub,sort,intersperse)
+import Data.Maybe(fromJust)
+import Data.Char
 import Dict.ErrM
 import UTF8
 import Util
 import Compound
-import Monad(when)
+import Control.Monad(when)
 import qualified CTrie
 
 type Stem      = String

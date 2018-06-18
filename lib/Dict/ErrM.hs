@@ -6,7 +6,8 @@ module Dict.ErrM where
 
 -- the Error monad: like Maybe type with error msgs
 
-import Control.Monad (MonadPlus(..), liftM)
+import Control.Monad (MonadPlus(..), liftM, ap)
+import Control.Applicative
 
 data Err a = Ok a | Bad String
   deriving (Read, Show, Eq, Ord)
@@ -20,6 +21,14 @@ instance Monad Err where
 instance Functor Err where
   fmap = liftM
 
+instance Applicative Err where
+  pure = return
+  (<*>) = ap
+
+instance Alternative Err where
+  (<|>) = mplus
+  empty = mzero
+  
 instance MonadPlus Err where
   mzero = Bad "Err.mzero"
   mplus (Bad _) y = y

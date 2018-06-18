@@ -12,19 +12,21 @@
 -----------------------------------------------------------------------------
 module Command where
 
+import Control.Exception
 import System.Console.GetOpt
-import Maybe(fromMaybe)
-import List(isSuffixOf)
-import System(getProgName)
+import Data.Maybe(fromMaybe)
+import Data.List(isSuffixOf)
+import System.Environment(getProgName)
 import Dict.ErrM
-import IO
+import System.IO
+import System.IO.Error
 import UTF8
-import Char
+import Data.Char
 import General
 import Tokenize(tokens,norm)
 import Dictionary
 import Frontend
-import List(intersperse)
+import Data.List(intersperse)
 import qualified Data.Map as Map 
 -- import Frontend
 
