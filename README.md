@@ -15,36 +15,46 @@ the Greek support becomes more complete.
 Building and running
 --------------------
 
-To build the project, type 'make' in the project directory. You will
-need C development environment (GCC) and Glasgow Haskell Compiler
-(GHC). This will produce a binary 'morpho_greek' that is the actual
-morphological analyzer.
+To build the project, you can use the Haskell Tool Stack
+(https://docs.haskellstack.org/en/stable/README/). After you have
+installed the Stack, you can just type
 
-Program depends on haskell-network -library. If using Ubuntu or Debian,
-you can install necessary dependencies with
+    $ stack build
+	
+which will build the executable.
 
-     $ sudo apt-get install ghc6 libghc6-networking-dev build-essential
+When you have successfully compiled the program, 
 
-Building under Windows should also be possible, you will probably just
-need to recreate build script that works in your environment.
+     $ stack exec morpho_greek
 
-When you have successfully compiled the program, type
+will run the program.
 
-     $ morpho_greek -h
+     $ stack exec morpho_greek -h
 
-for a list of command line options. A very small dictionary is
+will give you a list of command line options. A very small dictionary is
 provided.
 
 To actually run the program with sample dictionary, type
 
-     $ morpho_greek greek.lexicon
+     $ stack exec morpho_greek greek.lexicon
 
-Now you can type words that are in dictionary -- in Greek (your
-terminal must be able to input Greek!). If the program recognizes
-word, it will output morphological analysis for the word.
+Now you can try inflections for words contained in the dictionary. If
+the program recognizes word, it will output morphological analysis for
+the word.
 
 Status and Todo
 ---------------
+
+This project has been in a long hiatus, due to lack of time, and the
+fact that it was written in Haskell 98, which didn't compile in modern
+GHCs. I finally updated the program to compile with lots of warnings,
+but I still don't have much time to spend on this. Anyway, the overall
+plan is as follows (not necessary in order):
+
+1) Fix warnings and clean up code
+2) Implement more Greek grammar
+3) Try to expose the analyser as a web service
+4) Handle accents correctly
 
 Currently, the morphological analysis is very much incomplete. Support
 is most complete for nouns, there is some incomplete support for
@@ -59,19 +69,6 @@ Even though the targetted Greek dialect is Koine Greek, I've used
 University Press 2001) as the basis for definitions and grammatical
 categories. This might change in future, if I find a handy and
 trustworthy grammar for Koine dialect.
-
-The long term goal is to have a complete morphological analyzer for
-Koine Greek. Another goal is to create some sort of educational
-software to help students learn all the myriad paradigms of ancient
-Greek language (if any of my students are reading this, prepare to
-become guinea pigs...).
-
-Overall plan of action is as follows:
-
- 1) Implement support for nouns
- 2) Implement support for regular verbs (including augmentation)
- 3) Implement support for non-regular verbs
- 4) Implement support for accentuation and breathing marks
 
 Authors
 -------
